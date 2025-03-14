@@ -161,3 +161,7 @@ git push origin my-branch-name
 
 
 The `ios` and `android` folder are gitignored in the project by default as they are automatically generated during the build process ([Continuous Native Generation](https://docs.expo.dev/workflow/continuous-native-generation/)). This means that you should not edit these folders directly and use [config plugins](https://docs.expo.dev/config-plugins/) instead. However, if you need to edit these folders, you can remove them from the `.gitignore` file so that they are tracked by git.
+#App Purpose
+The Entire purpose of the web gaming software we are building is to provide the user with a fun and interactive library of games in relation to Roanoke College
+- The games listed in the webstie will all pretain to Roanoke College, such as a mini-game where users can customize a charcter, or make custom commons dishes!
+- These games may give peace to some who currently have qualms with Roanoke College, and give them a productive outlet for their energy
