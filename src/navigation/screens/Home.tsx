@@ -1,6 +1,6 @@
 import { Button, Text } from '@react-navigation/elements';
 import { StyleSheet, View } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function Title() {
   return <Text style={{ fontSize: 30 }}>Chess Game</Text>;
@@ -15,7 +15,8 @@ function Game(){
       {squares.map((row, rowIndex) => (
         <View key={rowIndex} style={{flexDirection: 'row'}}>
           {row.map((square, squareIndex) => (
-            <View key={squareIndex} style={{width: 50, height: 50, backgroundColor: ((squareIndex%2)+color) == 1  ? 'white' : 'black'}}/>
+            <View key={squareIndex} style={{width: 50, height: 50, backgroundColor: ((rowIndex+squareIndex)%2) == 1  ? 'white' : 'black'}}/>
+            
           ))}
         </View>
       ))}
