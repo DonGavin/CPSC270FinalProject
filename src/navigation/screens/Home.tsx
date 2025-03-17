@@ -17,6 +17,7 @@ function Game(){
             <View key={squareIndex} style={{width: 50, height: 50, backgroundColor: true ? 'white' : 'black'}}/>
           ))}
         </View>
+      ))}
     </View>
   )
 }
