@@ -5,7 +5,13 @@ function Title() {
   return <Text style={{ fontSize: 30 }}>Chess Game</Text>;
 } 
 
-
+function Game(){
+  return (
+    <View>
+      <Text>Game</Text>
+    </View>
+  )
+}
 
 
 
