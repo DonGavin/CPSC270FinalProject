@@ -11,13 +11,13 @@ function Game(){
   const [squares, setSquares] = useState(Array(size).fill(null).map(()=>Array(size).fill(null).map(() => Math.random() < 0.5)))
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'red', width: '50%'}}>
-      {squares.map((row, rowIndex) => (
+      {/* {squares.map((row, rowIndex) => (
         <View key={rowIndex} style={{flexDirection: 'row'}}>
           {row.map((square, squareIndex) => (
             <View key={squareIndex} style={{width: 50, height: 50, backgroundColor: true ? 'white' : 'black'}}/>
           ))}
         </View>
-      ))}
+      ))} */}
     </View>
   )
 }
