@@ -7,7 +7,7 @@ function Title() {
 
 function Game(){
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'lightblue'}}>
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'lightblue', width: '100%'}}>
       <Text>Game</Text>
     </View>
   )
