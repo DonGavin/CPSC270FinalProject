@@ -8,7 +8,7 @@ function Title() {
 
 function Game(){
   const squaresNumber = 8;
-  const [squares, setSquares] = useState(Array(size).fill(null).map(()=>Array(size).fill(null).map(() => Math.random() < 0.5)))
+  const [squares, setSquares] = useState(Array(squaresNumber).fill(null).map(()=>Array(squaresNumber).fill(null).map(() => Math.random() < 0.5)))
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'red', width: '50%'}}>
       {/* {squares.map((row, rowIndex) => (
