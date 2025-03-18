@@ -15,7 +15,7 @@ function Game(){
       {squares.map((row, rowIndex) => (
         <View key={rowIndex} style={{flexDirection: 'row', flex: 1}}>
           {row.map((square, squareIndex) => (
-            <View key={squareIndex} style={{flex:1, aspectRatio: 1, backgroundColor: ((rowIndex+squareIndex)%2) == 1  ? 'white' : 'black'}}>
+            <View key={squareIndex} style={{flex:1, aspectRatio: 1, backgroundColor: ((rowIndex+squareIndex)%2) == 1  ? 'green' : 'black'}}>
             </View>
             
           ))}
