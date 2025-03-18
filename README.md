@@ -60,14 +60,14 @@ Make sure you have:
 
 ### Switching Between Branches
 
-#### Using VSCode UI:
+#### Using VSCode:
 1. Click on the branch name in the status bar
 2. Select the branch you want to switch to
 
 ### Making Changes in Your Branch
 
 1. Make your code changes in VSCode (You shouldn't ever have to really go online) 
-2. Stage changes by clicking the "+" next to modified files in the Source Control panel
+2. Stage changes by clicking the "+" next to modified files in the Source Control panel (or by pressing `Ctrl+S`)
 3. Enter a commit message in the text field
 4. Click the checkmark icon (or press `Ctrl+Enter`) to commit
 
@@ -96,12 +96,19 @@ git push origin my-branch-name
 2. Select "Pull"
 
 
-## Git Commands
+## What do these Git Commands do?
 
 - `git commit -m "message"`: Commit staged changes
+  1. To commit is to publish this change as a snap shot
+  2. It allows you to look for errors or difficulties that could arise
+  3. You must always commit before pushing 
 - `git push`: Push commits to remote repository
+  1. Pushing permanently alters a branch in the repository
+  2. It takes the changes you commited, and *pushes* them onto the branch
+  3. Remember to **never** push changes to the main branch unless we meet and discuss first
 - `git pull`: Fetch and merge changes from remote repository
-- `git merge branch-name`: Merge specified branch into current branch 
+  1. Once you perform your initial clone, you will need to *pull* any changes made to the main branch
+  2. Pulling from the main branch will ensure your code is up to date, and that any changes you've made work with the current version 
 - `git branch -d branch-name`: Delete a branch locally
 
 ## In Summary 
@@ -154,3 +161,9 @@ git push origin my-branch-name
 
 
 The `ios` and `android` folder are gitignored in the project by default as they are automatically generated during the build process ([Continuous Native Generation](https://docs.expo.dev/workflow/continuous-native-generation/)). This means that you should not edit these folders directly and use [config plugins](https://docs.expo.dev/config-plugins/) instead. However, if you need to edit these folders, you can remove them from the `.gitignore` file so that they are tracked by git.
+
+## App Purpose
+
+The Entire purpose of the web gaming software we are building is to provide the user with a fun and interactive library of games in relation to Roanoke College
+- The games listed in the webstie will all pretain to Roanoke College, such as a mini-game where users can customize a charcter, or make custom commons dishes!
+- These games may give peace to some who currently have qualms with Roanoke College, and give them a productive outlet for their energy
