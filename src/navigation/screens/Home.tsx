@@ -15,7 +15,7 @@ function Pawn() {
 function Rook() {
   [color, setColor] = useState(true)
   return (
-    <View ><Pressable style={{ width: 25, height: 25, backgroundColor: color ? 'blue' : 'green' }} onPress={()=>{setColor(!color)}}></Pressable></View>
+    <View ><Pressable style={{ width: 25, height: 25, backgroundColor: color ? 'blue' : 'pink' }} onPress={()=>{setColor(!color)}}></Pressable></View>
   );
 }
 
