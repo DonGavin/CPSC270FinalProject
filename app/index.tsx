@@ -104,6 +104,22 @@ export default function Index() {
             </ScrollView>
           )}
         </DragDropContentView>
+        <Text style={styles.subtitle}>Sample Pieces</Text>
+        <ScrollView horizontal contentContainerStyle={styles.sampleImagesContainer}>
+          {sampleImages.map((uri, index)=>
+          (
+            <DragDropContentView 
+            key={index} 
+            style={styles.sampleImageContainer} 
+            draggableSources={[{type:'image', value:uri}]}
+            >
+              <Image 
+              source={{uri}} 
+              style={styles.sampleImage} 
+              />
+            </DragDropContentView>))}
+
+        </ScrollView>
       </View>
     );
   };
