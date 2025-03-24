@@ -35,7 +35,7 @@ export default function Index() {
     const [droppedPieces, setDroppedPieces] = useState<DroppedPiece[]>([]);
     const [currentlyDragging, setCurrentlyDragging] = useState<string | null>(null);
     
-    // Sample image URIs (replace with your actual images)
+    // image URIs 
     const sampleImages = [
       'https://www.symbols.com/images/symbol/3404_white-king.png',
       'https://static.stands4.com/images/symbol/3405_white-queen.png',
@@ -188,7 +188,8 @@ export default function Index() {
       height: '100%',
     },
   });
-  return(<View>
+  return(
+  <View>
     <DraggablePiecesExample />
     </View>
 )
