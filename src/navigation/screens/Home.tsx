@@ -1,137 +1,146 @@
-import { Button, Text } from '@react-navigation/elements';
-import { Pressable, StyleSheet, View } from 'react-native';
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { DndProvider, useDrag, useDrop } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
-function Title() {
-  return <Text style={{ fontSize: 30 }}>Chess Game</Text>;
-}
+// Define the type of draggable items
+const ItemTypes = {
+  WIDGET: 'widget',
+};
 
-function Pawn({row, col, onMove}) {
-  const [position, setPosition] = useState({row, col});
-  function movePawn() {
-    const newRow = position.row + (row === 1 ? 1: -1);
-    if (onMove) onMove (position.row,position.col, newRow, position.col);
-    setPosition({row: newRow, col: position.col});
-  }
-  const [Pcolor, setPColor] = useState(true)
+// Draggable Widget Component for widget items (pieces)
+function DraggableWidget({ widgetType }: { widgetType: string }) {
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: ItemTypes.WIDGET,
+    item: { widgetType },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }));
+
   return (
-    <View style={{ width: 25, height: 25}}><Pressable style={{ width: 25, height: 25, backgroundColor: Pcolor ? 'white' : 'blue', justifyContent: 'center', alignItems:'center'}} onPress={movePawn}><Text>P</Text></Pressable></View>
+    <div
+      ref={drag}
+      style={{
+        opacity: isDragging ? 0.5 : 1,
+        cursor: 'grab',
+        padding: '10px',
+        margin: '10px',
+        backgroundColor: 'lightblue',
+        border: '1px solid black',
+        width: '100px',
+        textAlign: 'center',
+      }}
+    >
+      {widgetType}
+    </div>
   );
 }
 
-function Rook() {
-  const [Rcolor, setRColor] = useState(true)
-  // let Rcolor = true
+// Droppable Area Component (Board)
+function DropZone({
+  zoneId,
+  widgets,
+  onDrop,
+}: {
+  zoneId: number;
+  widgets: string[];
+  onDrop: (widgetType: string, zoneId: number) => void;
+}) {
+  const [{ isOver }, drop] = useDrop(() => ({
+    accept: ItemTypes.WIDGET,
+    drop: (item: { widgetType: string }) => {
+      onDrop(item.widgetType, zoneId);
+    },
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  }));
+
   return (
-    <View ><Pressable style={{ width: 25, height: 25, backgroundColor: Rcolor ? 'white' : 'pink', justifyContent: 'center', alignItems:'center' }} onPress={()=>{setRColor(!Rcolor)}}><Text>R</Text></Pressable></View>
+    <div
+      ref={drop}
+      style={{
+        height: '200px',
+        border: '2px dashed gray',
+        backgroundColor: isOver ? 'lightgreen' : 'white',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: '20px',
+        marginRight: '10px',
+        width: '200px',
+      }}
+    >
+      {isOver ? 'Release to drop' : `Drop Zone ${zoneId}`}
+      <div style={{ marginTop: '10px' }}>
+        {widgets.map((widget, index) => (
+          <div
+            key={index}
+            style={{
+              padding: '10px',
+              margin: '5px',
+              backgroundColor: 'lightgray',
+              border: '1px solid black',
+              width: '100px',
+              textAlign: 'center',
+            }}
+          >
+            {widget}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
-function Bishop() {
-  const [Bcolor, setBColor] = useState(true)
-  return (
-    <View ><Pressable style={{ width: 25, height: 25, backgroundColor: Bcolor ? 'white' : 'yellow', justifyContent: 'center', alignItems:'center' }} onPress={()=>{setBColor(!Bcolor)}}><Text>B</Text></Pressable></View>
-  );
-}
-
-function Knight() {
-  const [Kcolor, setKColor] = useState(true)
-  return (
-    <View ><Pressable style={{ width: 25, height: 25, backgroundColor: Kcolor ? 'white' : 'orange', justifyContent: 'center', alignItems:'center' }} onPress={()=>{setKColor(!Kcolor)}}><Text>N</Text></Pressable></View>
-  );
-}
-
-  function Queen() {
-    const [Qcolor, setQColor] = useState(true)
-    return (
-      <View ><Pressable style={{ width: 25, height: 25, backgroundColor: Qcolor ? 'white' : 'orange', justifyContent: 'center', alignItems:'center' }} onPress={()=>{setQColor(!Qcolor)}}><Text>Q</Text></Pressable></View>
-    );
-  }
-  
-  function King() {
-    const [Kcolor, setKColor] = useState(true)
-    return (
-      <View ><Pressable style={{ width: 25, height: 25, backgroundColor: Kcolor ? 'white' : 'orange', justifyContent: 'center', alignItems:'center' }} onPress={()=>{setKColor(!Kcolor)}}><Text>K</Text></Pressable></View>
-    );
-  }
-
-  function Board(){
-    const squaresNumber = 8;
-    const [pieces, setPieces] = useState({
-      pawns: Array.from({ length: squaresNumber }, (_, i) => ({ row: 1, col: i })), // White pawns created for row 1
-    });
-    const [squares, setSquares] = useState(Array(squaresNumber).fill(null).map(()=>Array(squaresNumber).fill(null).map(() => Math.random() < 0.5)))
-    const [color, setColor] = useState(true)
-    // function to move piece 
-    function movePiece(oldRow, oldCol, newRow, newCol){
-      setPieces((prevPieces) => ({
-        ...prevPieces,
-        pawns: prevPieces.pawns.map((p) =>
-          p.row === oldRow && p.col === oldCol ? { row: newRow, col: newCol } : p
-        ),
-      }));
-    }
-    // Function to generate a unique ID for each square
-    function getSquareId(row, col) {
-      // Common chess notation: a1, b2, etc.
-      const colLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-      return `${colLetters[col]}${8-row}`;
-    }
-    
-    // Function to render a square
-    function renderSquare(row, col) {
-      const isLight = (row + col) % 2 === 0;
-      const pawn = pieces.pawns.find((p) => p.row === row && p.col === col);
-      return (
-        <View
-          key={`${row}-${col}`}
-          style={{
-            width: 40,
-            height: 40,
-            backgroundColor: isLight ? "green" : "black",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {pawn && <Pawn row={row} col={col} onMove={movePiece} />}
-        </View>
-      );
-    }
-    
-    return (
-      <View style={{ flexWrap: "wrap", flexDirection: "row", width: 320 }}>
-        {Array.from({ length: squaresNumber }).map((_, row) =>
-        Array.from({ length: squaresNumber }).map((_, col) => renderSquare(row, col)))}      </View>
-    )
-  }
-
-function Game(){
-  return (
-      <Board />
-)
-}
-
-
-
-
-
-
-
-
+// Exported Home Function
 export function Home() {
+  const [zoneWidgets, setZoneWidgets] = useState<{ [key: number]: string[] }>({
+    1: [],
+    2: [],
+    3: [],
+  });
+  // Drop zones with array's that store the widgets dropped in them (Data for future Ai responses (stock fish and GPT))
+
+  // Handle widget drop specifying type of widget and ZoneId (box dropped into)
+  const handleDrop = (widgetType: string, zoneId: number) => {
+    setZoneWidgets((prev) => ({
+      ...prev,
+      [zoneId]: [...prev[zoneId], widgetType],
+    }));
+  };
+
   return (
-    <View style={styles.container}>
-      <Title />
-      <Game />
-    </View>
+    <DndProvider backend={HTML5Backend}>
+      <div className="App" style={{ padding: '20px' }}>
+        <div className="widgets" style={{ display: 'flex', gap: '10px' }}>
+          <DraggableWidget widgetType="Im a pawn" />
+          <DraggableWidget widgetType="Im also a pawn (for now)" />
+          <DraggableWidget widgetType="My name is David and I'm different" />
+          <DraggableWidget widgetType="I'm a queen" />
+        </div>
+        <div
+          className="drop-zones"
+          style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}
+        >
+          <DropZone
+            zoneId={1}
+            widgets={zoneWidgets[1]}
+            onDrop={handleDrop}
+          />
+          <DropZone
+            zoneId={2}
+            widgets={zoneWidgets[2]}
+            onDrop={handleDrop}
+          />
+          <DropZone
+            zoneId={3}
+            widgets={zoneWidgets[3]}
+            onDrop={handleDrop}
+          />
+        </div>
+      </div>
+    </DndProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 10,
-  },
-});
