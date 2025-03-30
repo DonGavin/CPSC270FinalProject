@@ -6,10 +6,16 @@ function Title() {
   return <Text style={{ fontSize: 30 }}>Chess Game</Text>;
 }
 
-function Pawn() {
+function Pawn({row, col, onMove}) {
+  const [position, setPosition] = useState({row, col});
+  function movePawn() {
+    const newRow = position.row + (row === 1 ? 1: -1);
+    if (onMove) onMove (position.row,position.col, newRow, position.col);
+    setPosition({row: newRow, col: position.col});
+  }
   const [Pcolor, setPColor] = useState(true)
   return (
-    <View style={{ width: 25, height: 25}}><Pressable style={{ width: 25, height: 25, backgroundColor: Pcolor ? 'white' : 'blue', justifyContent: 'center', alignItems:'center'}} onPress={()=>{setPColor(!Pcolor)}}><Text>P</Text></Pressable></View>
+    <View style={{ width: 25, height: 25}}><Pressable style={{ width: 25, height: 25, backgroundColor: Pcolor ? 'white' : 'blue', justifyContent: 'center', alignItems:'center'}} onPress={movePawn}><Text>P</Text></Pressable></View>
   );
 }
 
