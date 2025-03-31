@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
-// Define the type of draggable items
 const ItemTypes = {
   WIDGET: 'widget',
 };
 
-// Draggable Widget Component for widget items (pieces)
 function DraggableWidget({ widgetType }: { widgetType: string }) {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.WIDGET,
