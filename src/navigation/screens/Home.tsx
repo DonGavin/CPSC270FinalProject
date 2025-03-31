@@ -34,7 +34,6 @@ function DraggableWidget({ widgetType }: { widgetType: string }) {
   );
 }
 
-// Droppable Area Component (Board)
 function DropZone({
   zoneId,
   widgets,
@@ -44,16 +43,21 @@ function DropZone({
   widgets: string[];
   onDrop: (widgetType: string, zoneId: number) => void;
 }) {
-  const [{ isOver }, drop] = useDrop(() => ({
+  const [isFilled, setIsFilled] = useState(false);
+  const [{ isOver}, drop] = useDrop(() => ({
     accept: ItemTypes.WIDGET,
     drop: (item: { widgetType: string }) => {
       onDrop(item.widgetType, zoneId);
+      setIsFilled(true);
       console.log(item.widgetType, zoneId);
     },
     collect: (monitor) => ({
+      // double exclamation point converts to bollean regardless of value type 
       isOver: !!monitor.isOver(),
+      canDrop: !!monitor.canDrop(),
     }),
-  }));
+    canDrop: () => !isFilled,
+  }), [isFilled]);
 
   return (
     <div
@@ -93,7 +97,6 @@ function DropZone({
   );
 }
 
-// Exported Home Function
 export function Home() {
   const [zoneWidgets, setZoneWidgets] = useState<{ [key: number]: string[] }>({
     1: [],
