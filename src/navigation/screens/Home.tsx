@@ -48,6 +48,7 @@ function DropZone({
     accept: ItemTypes.WIDGET,
     drop: (item: { widgetType: string }) => {
       onDrop(item.widgetType, zoneId);
+      console.log(item.widgetType, zoneId);
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
