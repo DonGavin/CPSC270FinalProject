@@ -158,7 +158,9 @@ git push origin my-branch-name
 - In the terminal running the development server, press `i` to open the iOS simulator, `a` to open the Android device or emulator, or `w` to open the web browser.
 
 ## Notes
+This app uses the react-dnd library, with a HTML5 backend
 
+https://react-dnd.github.io/react-dnd/docs/api/dnd-provider
 
 The `ios` and `android` folder are gitignored in the project by default as they are automatically generated during the build process ([Continuous Native Generation](https://docs.expo.dev/workflow/continuous-native-generation/)). This means that you should not edit these folders directly and use [config plugins](https://docs.expo.dev/config-plugins/) instead. However, if you need to edit these folders, you can remove them from the `.gitignore` file so that they are tracked by git.
 
