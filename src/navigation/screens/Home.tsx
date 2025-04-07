@@ -6,7 +6,15 @@ const ItemTypes = {
   WIDGET: 'widget',
 };
 
-function DraggableWidget({ widgetType }: { widgetType: string }) {
+function DraggableWidget({
+  widgetType,
+  position, // position added for future chess tracking functionality 
+  onRemove
+  }: { 
+    widgetType: string;
+    position: number;
+    onRemove: (position: number) => void; //make position void upon removal (piece take in future)
+  }) {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.WIDGET,
     item: { widgetType },
@@ -35,29 +43,30 @@ function DraggableWidget({ widgetType }: { widgetType: string }) {
 }
 
 function DropZone({
-  zoneId,
+  zoneId, //zoneId will be phased out by future position tracker (was replaced)
+  position,
   widgets,
   onDrop,
+  onRemove,
 }: {
   zoneId: number;
+  position: number;
   widgets: string[];
   onDrop: (widgetType: string, zoneId: number) => void;
+  onRemove: (position: number) => void; //make position void upon removal (piece take in future)
 }) {
-  const [isFilled, setIsFilled] = useState(false);
   const [{ isOver}, drop] = useDrop(() => ({
     accept: ItemTypes.WIDGET,
-    drop: (item: { widgetType: string }) => {
+    drop: (item: { widgetType: string; sourcePosition: number}) => {
       onDrop(item.widgetType, zoneId);
-      setIsFilled(true);
-      console.log(item.widgetType, zoneId);
+      return {position}; // return position to be used in future chess tracking 
     },
     collect: (monitor) => ({
       // double exclamation point converts to bollean regardless of value type 
       isOver: !!monitor.isOver(),
-      canDrop: !!monitor.canDrop(),
+      // canDrop: !!monitor.canDrop(),
     }),
-    canDrop: () => !isFilled,
-  }), [isFilled]);
+  }));
 
   return (
     <div
