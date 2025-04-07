@@ -3,21 +3,21 @@ import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 const ItemTypes = {
-  WIDGET: 'widget',
+  CHESS_PIECE: 'chess_piece',
 };
 
-function DraggableWidget({
-  widgetType,
+function ChessPiece({
+  piece,
   position, // position added for future chess tracking functionality 
   onRemove
   }: { 
-    widgetType: string;
+    piece: string;
     position: number;
     onRemove: (position: number) => void; //make position void upon removal (piece take in future)
   }) {
   const [{ isDragging }, drag] = useDrag(() => ({
-    type: ItemTypes.WIDGET,
-    item: { widgetType },
+    type: ItemTypes.CHESS_PIECE,
+    item: { piece, sourcePosition: position },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -37,7 +37,7 @@ function DraggableWidget({
         textAlign: 'center',
       }}
     >
-      {widgetType}
+      {piece}
     </div>
   );
 }
