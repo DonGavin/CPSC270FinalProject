@@ -29,12 +29,14 @@ function ChessPiece({
       style={{
         opacity: isDragging ? 0.5 : 1,
         cursor: 'grab',
-        padding: '10px',
-        margin: '5px',
+        padding: '0.5rem',
+        margin: '0.25rem',
         backgroundColor: 'lightgray',
         border: '1px solid black',
-        width: '100px',
+        width: '80%',
+        maxWidth: '80%',
         textAlign: 'center',
+        fontSize: 'min(1rem, 3vw)',
       }}
     >
       {piece}
@@ -68,13 +70,13 @@ function BoardSquare({
     <div
       ref={drop}
       style={{
-        height: '150px',
-        width: '150px',
-        border: '2px solid black',
+        aspectRatio: '1/1',
+        border: '1px solid black',
         backgroundColor: isOver ? 'lightgreen' : 'white',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        position: 'relative',
       }}
     >
       {piece && (
@@ -165,15 +167,32 @@ export function Home() {
   }
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="chess-game" style={{ 
-        display: 'grid',
-        gridTemplateColumns: 'repeat(8, 200px)',
-        gridTemplateRows: 'repeat(6, 200px)',
-        width: '1200px',
-        height: '900px',
-        margin: '20px auto', 
+
+<div style={{
+        width: '100%',
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '10px',
+        boxSizing: 'border-box',
+      }}>
+        <div style={{
+          width: '100%',
+          maxWidth: 'min(90vh, 90vw)',
+          aspectRatio: '4/3',
         }}>
-          {render()}
+          <div style={{ 
+            display: 'grid',
+            gridTemplateColumns: 'repeat(8, 1fr)',
+            gridTemplateRows: 'repeat(6, 1fr)',
+            width: '100%',
+            height: '100%',
+            border: '2px solid #333',
+          }}>
+            {render()}
+          </div>
+        </div>
       </div>
     </DndProvider>
   );
