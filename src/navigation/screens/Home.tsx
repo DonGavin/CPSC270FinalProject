@@ -8,12 +8,12 @@ const ItemTypes = {
 
 function ChessPiece({
   piece,
-  position, // position added for future chess tracking functionality 
+  position, 
   onRemove
   }: { 
     piece: string;
     position: number;
-    onRemove: (position: number) => void; //make position void upon removal (piece take in future)
+    onRemove: (position: number) => void;
   }) {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.CHESS_PIECE,
@@ -21,7 +21,7 @@ function ChessPiece({
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
-  }));
+  }),[piece, position]); // added position to dependency to make sure drag works correctly
 
   return (
     <div
@@ -51,7 +51,7 @@ function BoardSquare({
   position: number;
   piece: string | null;
   onDrop: (piece: string, targetPosition: number, sourcePosition: number) => void;
-  onRemove: (position: number) => void; //make position void upon removal (piece take in future)
+  onRemove: (position: number) => void; 
 }) {
   const [{ isOver}, drop] = useDrop(() => ({
     accept: ItemTypes.CHESS_PIECE,
@@ -60,12 +60,9 @@ function BoardSquare({
       return {position}; // return position to be used in future chess tracking 
     },
     collect: (monitor) => ({
-      // double exclamation point converts to bollean regardless of value type 
       isOver: !!monitor.isOver(),
-      // canDrop: !!monitor.canDrop(),
-      // make note that canDrop is not needed, piece exclusion handled by overtaking 
     }),
-  }));
+  }), [position, onDrop]); // added position to dependency to make sure drop works correctly
 
   return (
     <div
@@ -132,7 +129,6 @@ export function Home() {
   });
   // Drop zones with array's that store the widgets dropped in them (Data for future Ai responses (stock fish and GPT))
 
-  // Handle widget drop specifying type of widget and ZoneId (box dropped into)
   const handleDrop = (piece: string, targetPosition: number, sourcePosition: number) => {
     setBoardState((prev) => {
       // record new state
