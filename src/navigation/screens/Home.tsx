@@ -30,8 +30,8 @@ function ChessPiece({
         opacity: isDragging ? 0.5 : 1,
         cursor: 'grab',
         padding: '10px',
-        margin: '10px',
-        backgroundColor: 'lightblue',
+        margin: '5px',
+        backgroundColor: 'lightgray',
         border: '1px solid black',
         width: '100px',
         textAlign: 'center',
@@ -42,29 +42,28 @@ function ChessPiece({
   );
 }
 
-function DropZone({
-  zoneId, //zoneId will be phased out by future position tracker (was replaced)
+function BoardSquare({
   position,
-  widgets,
+  piece,
   onDrop,
   onRemove,
 }: {
-  zoneId: number;
   position: number;
-  widgets: string[];
-  onDrop: (widgetType: string, zoneId: number) => void;
+  piece: string | null;
+  onDrop: (piece: string, targetPosition: number, sourcePosition: number) => void;
   onRemove: (position: number) => void; //make position void upon removal (piece take in future)
 }) {
   const [{ isOver}, drop] = useDrop(() => ({
-    accept: ItemTypes.WIDGET,
-    drop: (item: { widgetType: string; sourcePosition: number}) => {
-      onDrop(item.widgetType, zoneId);
+    accept: ItemTypes.CHESS_PIECE,
+    drop: (item: { piece: string; sourcePosition: number}) => {
+      onDrop(item.piece, position, item.sourcePosition);
       return {position}; // return position to be used in future chess tracking 
     },
     collect: (monitor) => ({
       // double exclamation point converts to bollean regardless of value type 
       isOver: !!monitor.isOver(),
       // canDrop: !!monitor.canDrop(),
+      // make note that canDrop is not needed, piece exclusion handled by overtaking 
     }),
   }));
 
@@ -72,85 +71,113 @@ function DropZone({
     <div
       ref={drop}
       style={{
-        height: '200px',
-        border: '2px dashed gray',
+        height: '150px',
+        width: '150px',
+        border: '2px solid black',
         backgroundColor: isOver ? 'lightgreen' : 'white',
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: '20px',
-        marginRight: '10px',
-        width: '200px',
       }}
     >
-      {isOver ? 'Release to drop' : `Drop Zone ${zoneId}`}
-      <div style={{ marginTop: '10px' }}>
-        {widgets.map((widget, index) => (
-          <div
-            key={index}
-            style={{
-              padding: '10px',
-              margin: '5px',
-              backgroundColor: 'lightgray',
-              border: '1px solid black',
-              width: '100px',
-              textAlign: 'center',
-            }}
-          >
-            {widget}
-          </div>
-        ))}
-      </div>
+      {piece && (
+        <ChessPiece
+          piece={piece}
+          position={position}
+          onRemove={onRemove}
+        />
+      )}
     </div>
   );
 }
-
+// Home will be the displayed board 
 export function Home() {
-  const [zoneWidgets, setZoneWidgets] = useState<{ [key: number]: string[] }>({
-    1: [],
-    2: [],
-    3: [],
+  const [boardState, setBoardState] = useState<{ [key: number]: string | null}>({
+    0: "Rook",
+    1: "Knight",
+    2: "Bishop",
+    3: "Queen",
+    4: "King",
+    5: "Bishop",
+    6: "Knight",
+    7: "Rook",
+    8: "Pawn",
+    9: "Pawn",
+    10: "Pawn",
+    11: "Pawn",
+    12: "Pawn",
+    13: "Pawn",
+    14: "Pawn",
+    15: "Pawn",
+    16: null, 17: null, 18: null, 19: null, 20: null, 
+    21: null, 22: null, 23: null, 24: null, 25: null, 
+    26: null, 27: null, 28: null, 29: null, 30: null, 
+    31: null, 
+    32: "Pawn",
+    33: "Pawn",
+    34: "Pawn",
+    35: "Pawn",
+    36: "Pawn",
+    37: "Pawn",
+    38: "Pawn",
+    39: "Pawn",
+    40: "Rook",
+    41: "Knight",
+    42: "Bishop",
+    43: "Queen",
+    44: "King",
+    45: "Bishop",
+    46: "Knight",
+    47: "Rook",
   });
   // Drop zones with array's that store the widgets dropped in them (Data for future Ai responses (stock fish and GPT))
 
   // Handle widget drop specifying type of widget and ZoneId (box dropped into)
-  const handleDrop = (widgetType: string, zoneId: number) => {
-    setZoneWidgets((prev) => ({
+  const handleDrop = (piece: string, targetPosition: number, sourcePosition: number) => {
+    setBoardState((prev) => {
+      // record new state
+      const newState = {...prev};
+      newState[sourcePosition] = null;
+      // remove piece from old position (source)
+      newState[targetPosition] = piece;
+      // update piece position replaceing any existing value (piece)
+      return newState; //return new board state 
+    });
+  };
+  // Handle removal (piece take)
+  const handleRemove = (position: number) => {
+    setBoardState((prev)=> ({
       ...prev,
-      [zoneId]: [...prev[zoneId], widgetType],
+      [position]: null, // remove piece from position
     }));
   };
-
+  // create basic board with loop 
+  const render = () => {
+    const squares = [];
+    for (let i = 0; i < 48; i++){
+      squares.push(
+        <BoardSquare
+          key={i}
+          position={i}
+          piece={boardState[i]}
+          onDrop={handleDrop}
+          onRemove={handleRemove}
+        />
+      );
+    }
+    return squares;
+  }
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="App" style={{ padding: '20px' }}>
-        <div className="widgets" style={{ display: 'flex', gap: '10px' }}>
-          <DraggableWidget widgetType="Im a pawn" />
-          <DraggableWidget widgetType="Im also a pawn (for now)" />
-          <DraggableWidget widgetType="My name is David and I'm different" />
-          <DraggableWidget widgetType="I'm a queen" />
-        </div>
-        <div
-          className="drop-zones"
-          style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}
-        >
-          <DropZone
-            zoneId={1}
-            widgets={zoneWidgets[1]}
-            onDrop={handleDrop}
-          />
-          <DropZone
-            zoneId={2}
-            widgets={zoneWidgets[2]}
-            onDrop={handleDrop}
-          />
-          <DropZone
-            zoneId={3}
-            widgets={zoneWidgets[3]}
-            onDrop={handleDrop}
-          />
-        </div>
+      <div className="chess-game" style={{ 
+        display: 'grid',
+        gridTemplateColumns: 'repeat(8, 200px)',
+        gridTemplateRows: 'repeat(6, 200px)',
+        width: '1200px',
+        height: '900px',
+        margin: '20px auto', 
+        }}>
+          {render()}
       </div>
     </DndProvider>
   );
