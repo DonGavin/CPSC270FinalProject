@@ -77,6 +77,7 @@ function BoardSquare({
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
+        backgroundColor: 'black',
       }}
     >
       {piece && (
@@ -176,13 +177,11 @@ export function Home() {
         justifyContent: 'center',
         padding: '10px',
         boxSizing: 'border-box',
-        backgroundColor: 'lightblue',
       }}>
         <div style={{
           width: '100%',
           maxWidth: 'min(90vh, 90vw)',
           aspectRatio: '4/3',
-          backgroundColor: 'red',
         }}>
           <div style={{ 
             display: 'grid',
@@ -191,7 +190,6 @@ export function Home() {
             width: '100%',
             height: '100%',
             border: '2px solid #333',
-            backgroundColor: 'red',
           }}>
             {render()}
           </div>
