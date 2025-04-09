@@ -176,6 +176,7 @@ export function Home() {
         justifyContent: 'center',
         padding: '10px',
         boxSizing: 'border-box',
+        backgroundColor: 'lightblue',
       }}>
         <div style={{
           width: '100%',
