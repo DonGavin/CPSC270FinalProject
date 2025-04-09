@@ -148,14 +148,14 @@ export function Home() {
   }
 
   function isKingMove(sourcePosition: number, targetPosition: number): boolean {
-    return (targetPosition === sourcePosition - 8) || 
-    (targetPosition === sourcePosition + 8) || 
-    (targetPosition === sourcePosition - 1) || 
+    return (targetPosition === sourcePosition - 1) || 
     (targetPosition === sourcePosition + 1) || 
-    (targetPosition === sourcePosition - 9) ||
-    (targetPosition === sourcePosition + 9) || 
     (targetPosition === sourcePosition - 7) || 
-    (targetPosition === sourcePosition + 7);
+    (targetPosition === sourcePosition + 7) || 
+    (targetPosition === sourcePosition - 8) ||
+    (targetPosition === sourcePosition + 8) || 
+    (targetPosition === sourcePosition - 9) || 
+    (targetPosition === sourcePosition + 9);
   }
 
   function isQueenMove(sourcePosition: number, targetPosition: number): boolean {
