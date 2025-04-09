@@ -72,12 +72,11 @@ function BoardSquare({
       style={{
         aspectRatio: '1/1',
         border: '1px solid black',
-        backgroundColor: isOver ? 'lightgreen' : 'white',
+        backgroundColor: isOver ? 'lightgreen' : position % 2  === 0 && position/2 === 0 ? 'white' : 'gray',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
-        backgroundColor: 'black',
       }}
     >
       {piece && (
@@ -112,23 +111,26 @@ export function Home() {
     16: null, 17: null, 18: null, 19: null, 20: null, 
     21: null, 22: null, 23: null, 24: null, 25: null, 
     26: null, 27: null, 28: null, 29: null, 30: null, 
-    31: null, 
-    32: "Pawn",
-    33: "Pawn",
-    34: "Pawn",
-    35: "Pawn",
-    36: "Pawn",
-    37: "Pawn",
-    38: "Pawn",
-    39: "Pawn",
-    40: "Rook",
-    41: "Knight",
-    42: "Bishop",
-    43: "Queen",
-    44: "King",
-    45: "Bishop",
-    46: "Knight",
-    47: "Rook",
+    31: null, 32: null, 33: null, 34: null, 35: null,
+    36: null, 37: null, 38: null, 39: null, 40: null,
+    41: null, 42: null, 43: null, 44: null, 45: null,
+    46: null, 47: null,
+    48: "Pawn",
+    49: "Pawn",
+    50: "Pawn",
+    51: "Pawn",
+    52: "Pawn",
+    53: "Pawn",
+    54: "Pawn",
+    55: "Pawn",
+    56: "Rook",
+    57: "Knight",
+    58: "Bishop",
+    59: "Queen",
+    60: "King",
+    61: "Bishop",
+    62: "Knight",
+    63: "Rook",
   });
   // Drop zones with array's that store the widgets dropped in them (Data for future Ai responses (stock fish and GPT))
 
@@ -153,7 +155,7 @@ export function Home() {
   // create basic board with loop 
   const render = () => {
     const squares = [];
-    for (let i = 0; i < 48; i++){
+    for (let i = 0; i < 64; i++){
       squares.push(
         <BoardSquare
           key={i}
@@ -171,7 +173,7 @@ export function Home() {
 
 <div style={{
         width: '100%',
-        height: '100vh',
+        height: '100%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -181,12 +183,12 @@ export function Home() {
         <div style={{
           width: '100%',
           maxWidth: 'min(90vh, 90vw)',
-          aspectRatio: '4/3',
+          aspectRatio: '1/1',
         }}>
           <div style={{ 
             display: 'grid',
             gridTemplateColumns: 'repeat(8, 1fr)',
-            gridTemplateRows: 'repeat(6, 1fr)',
+            gridTemplateRows: 'repeat(8, 1fr)',
             width: '100%',
             height: '100%',
             border: '2px solid #333',
