@@ -136,7 +136,7 @@ export function Home() {
   // Drop zones with array's that store the widgets dropped in them (Data for future Ai responses (stock fish and GPT))
 
   function checkMove(sourcePosition: number, targetPosition: number, move: number): boolean {
-    return targetPosition === sourcePosition + move;
+    return targetPosition === sourcePosition - move;
   }
 
   function checkMoveBothDirections(sourcePosition: number, targetPosition: number, move: number): boolean {
@@ -145,15 +145,47 @@ export function Home() {
 
   function isPawnMove(sourcePosition: number, targetPosition: number): boolean {
     //needs to change this so that it can move 2 spaces on first move
-    return (targetPosition === sourcePosition - 8) || (targetPosition === sourcePosition - 16);
+    return checkMove(sourcePosition, targetPosition, 8) || checkMove(sourcePosition, targetPosition, 16);
   }
 
   function isRookMove(sourcePosition: number, targetPosition: number): boolean {
-    return  (targetPosition === sourcePosition - 8);
+    //doesn't check if the target position is in the same row or column, add that logic here
+
+    //first group checks horizontal
+    return  checkMoveBothDirections(sourcePosition, targetPosition, 1) ||
+    checkMoveBothDirections(sourcePosition, targetPosition, 2) ||
+    checkMoveBothDirections(sourcePosition, targetPosition, 3) ||
+    checkMoveBothDirections(sourcePosition, targetPosition, 4) ||
+    checkMoveBothDirections(sourcePosition, targetPosition, 5) ||
+    checkMoveBothDirections(sourcePosition, targetPosition, 6) ||
+    checkMoveBothDirections(sourcePosition, targetPosition, 7)||
+    
+    //second group checks vertical
+    checkMoveBothDirections(sourcePosition, targetPosition, 8) ||
+    checkMoveBothDirections(sourcePosition, targetPosition, 16) ||
+    checkMoveBothDirections(sourcePosition, targetPosition, 24) ||
+    checkMoveBothDirections(sourcePosition, targetPosition, 32) ||
+    checkMoveBothDirections(sourcePosition, targetPosition, 40) ||
+    checkMoveBothDirections(sourcePosition, targetPosition, 48) ||
+    checkMoveBothDirections(sourcePosition, targetPosition, 56);
   }
 
   function isBishopMove(sourcePosition: number, targetPosition: number): boolean {
-    return true;
+    //multiples of 7 to get right diagonal movement
+    return checkMoveBothDirections(sourcePosition, targetPosition, 7) ||
+      checkMoveBothDirections(sourcePosition, targetPosition, 14) ||
+      checkMoveBothDirections(sourcePosition, targetPosition, 21) ||
+      checkMoveBothDirections(sourcePosition, targetPosition, 28) ||
+      checkMoveBothDirections(sourcePosition, targetPosition, 35) ||
+      checkMoveBothDirections(sourcePosition, targetPosition, 42) ||
+      //multiples of 9 to get left diagonal movement
+      checkMoveBothDirections(sourcePosition, targetPosition, 9) ||
+      checkMoveBothDirections(sourcePosition, targetPosition, 18) ||
+      checkMoveBothDirections(sourcePosition, targetPosition, 27) ||
+      checkMoveBothDirections(sourcePosition, targetPosition, 36) ||
+      checkMoveBothDirections(sourcePosition, targetPosition, 45) ||
+      checkMoveBothDirections(sourcePosition, targetPosition, 54) ||
+      checkMoveBothDirections(sourcePosition, targetPosition, 63);
   }
 
   function isKingMove(sourcePosition: number, targetPosition: number): boolean {
@@ -164,7 +196,7 @@ export function Home() {
   }
 
   function isQueenMove(sourcePosition: number, targetPosition: number): boolean {
-    return true;
+    return isBishopMove(sourcePosition, targetPosition) || isRookMove(sourcePosition, targetPosition);
   }
 
   function isKnightMove(sourcePosition: number, targetPosition: number): boolean {
