@@ -72,7 +72,7 @@ function BoardSquare({
       style={{
         aspectRatio: '1/1',
         border: '1px solid black',
-        backgroundColor: isOver ? 'lightgreen' : position % 2  === 0 && position/2 === 0 ? 'white' : 'gray',
+        backgroundColor: isOver ? 'lightgreen' : (Math.floor(position/8)+(position%8))%2 === 0  ? 'white' : 'gray',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
