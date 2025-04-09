@@ -152,12 +152,10 @@ export function Home() {
   }
 
   function isInRow(sourcePosition: number, targetPosition: number): boolean {
-    // Check if the source and target positions are in the same row
     return Math.floor(sourcePosition / 8) === Math.floor(targetPosition / 8);
   }
 
   function isInColumn(sourcePosition: number, targetPosition: number): boolean {
-    // Check if the source and target positions are in the same column
     return sourcePosition % 8 === targetPosition % 8;
   }
 
@@ -166,12 +164,10 @@ export function Home() {
   }
 
   function isInDiagonal(sourcePosition: number, targetPosition: number): boolean {
-    // Check if the source and target positions are in the same diagonal
     return Math.abs(Math.floor(sourcePosition / 8) - Math.floor(targetPosition / 8)) === Math.abs(sourcePosition % 8 - targetPosition % 8);
   }
 
   function isBishopMove(sourcePosition: number, targetPosition: number): boolean {
-
     return isInDiagonal(sourcePosition, targetPosition);
   }
 
