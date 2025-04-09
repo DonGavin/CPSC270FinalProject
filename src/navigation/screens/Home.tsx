@@ -151,26 +151,18 @@ export function Home() {
     return checkMove(sourcePosition, targetPosition, 8) || checkMove(sourcePosition, targetPosition, 16);
   }
 
-  function isRookMove(sourcePosition: number, targetPosition: number): boolean {
-    //doesn't check if the target position is in the same row or column, add that logic here
+  function isInRow(sourcePosition: number, targetPosition: number): boolean {
+    // Check if the source and target positions are in the same row
+    return Math.floor(sourcePosition / 8) === Math.floor(targetPosition / 8);
+  }
 
-    //first group checks horizontal
-    return  checkMoveBothDirections(sourcePosition, targetPosition, 1) ||
-    checkMoveBothDirections(sourcePosition, targetPosition, 2) ||
-    checkMoveBothDirections(sourcePosition, targetPosition, 3) ||
-    checkMoveBothDirections(sourcePosition, targetPosition, 4) ||
-    checkMoveBothDirections(sourcePosition, targetPosition, 5) ||
-    checkMoveBothDirections(sourcePosition, targetPosition, 6) ||
-    checkMoveBothDirections(sourcePosition, targetPosition, 7)||
-    
-    //second group checks vertical
-    checkMoveBothDirections(sourcePosition, targetPosition, 8) ||
-    checkMoveBothDirections(sourcePosition, targetPosition, 16) ||
-    checkMoveBothDirections(sourcePosition, targetPosition, 24) ||
-    checkMoveBothDirections(sourcePosition, targetPosition, 32) ||
-    checkMoveBothDirections(sourcePosition, targetPosition, 40) ||
-    checkMoveBothDirections(sourcePosition, targetPosition, 48) ||
-    checkMoveBothDirections(sourcePosition, targetPosition, 56);
+  function isInColumn(sourcePosition: number, targetPosition: number): boolean {
+    // Check if the source and target positions are in the same column
+    return sourcePosition % 8 === targetPosition % 8;
+  }
+
+  function isRookMove(sourcePosition: number, targetPosition: number): boolean {
+    return  isInRow(sourcePosition, targetPosition) || isInColumn(sourcePosition, targetPosition);
   }
 
   function isBishopMove(sourcePosition: number, targetPosition: number): boolean {
