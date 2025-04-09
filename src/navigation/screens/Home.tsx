@@ -145,6 +145,7 @@ export function Home() {
 
   function isPawnMove(sourcePosition: number, targetPosition: number): boolean {
     //needs to change this so that it can move 2 spaces on first move
+    //also needs movement to take other pawns
     return checkMove(sourcePosition, targetPosition, 8) || checkMove(sourcePosition, targetPosition, 16);
   }
 
@@ -200,7 +201,12 @@ export function Home() {
   }
 
   function isKnightMove(sourcePosition: number, targetPosition: number): boolean {
-    return true;
+    console.log("Knight move", sourcePosition, targetPosition, sourcePosition - targetPosition);
+    //17, 15, 10, 6, -6, -10, -15, -17
+    return checkMove(sourcePosition, targetPosition, 17) ||
+          checkMoveBothDirections(sourcePosition, targetPosition, 15) ||
+          checkMoveBothDirections(sourcePosition, targetPosition, 10) ||
+          checkMoveBothDirections(sourcePosition, targetPosition, 6);
   }
 
   function isValidMove(piece:string, sourcePosition: number, targetPosition: number): boolean {
