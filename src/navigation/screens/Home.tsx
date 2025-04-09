@@ -112,7 +112,7 @@ export function Home() {
     21: null, 22: null, 23: null, 24: null, 25: null, 
     26: null, 27: null, 28: null, 29: null, 30: null, 
     31: null, 
-    32: "Apple",
+    32: "Pawn",
     33: "Pawn",
     34: "Pawn",
     35: "Pawn",
