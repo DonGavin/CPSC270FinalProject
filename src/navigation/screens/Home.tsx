@@ -172,13 +172,17 @@ export function Home() {
     <DndProvider backend={HTML5Backend}>
 
 <div style={{
-        width: '100%',
-        height: '100%',
+        width: '75%',
+        height: '75%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         padding: '10px',
         boxSizing: 'border-box',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
       }}>
         <div style={{
           width: '100%',
