@@ -165,22 +165,14 @@ export function Home() {
     return  isInRow(sourcePosition, targetPosition) || isInColumn(sourcePosition, targetPosition);
   }
 
+  function isInDiagonal(sourcePosition: number, targetPosition: number): boolean {
+    // Check if the source and target positions are in the same diagonal
+    return Math.abs(Math.floor(sourcePosition / 8) - Math.floor(targetPosition / 8)) === Math.abs(sourcePosition % 8 - targetPosition % 8);
+  }
+
   function isBishopMove(sourcePosition: number, targetPosition: number): boolean {
-    //multiples of 7 to get right diagonal movement
-    return checkMoveBothDirections(sourcePosition, targetPosition, 7) ||
-      checkMoveBothDirections(sourcePosition, targetPosition, 14) ||
-      checkMoveBothDirections(sourcePosition, targetPosition, 21) ||
-      checkMoveBothDirections(sourcePosition, targetPosition, 28) ||
-      checkMoveBothDirections(sourcePosition, targetPosition, 35) ||
-      checkMoveBothDirections(sourcePosition, targetPosition, 42) ||
-      //multiples of 9 to get left diagonal movement
-      checkMoveBothDirections(sourcePosition, targetPosition, 9) ||
-      checkMoveBothDirections(sourcePosition, targetPosition, 18) ||
-      checkMoveBothDirections(sourcePosition, targetPosition, 27) ||
-      checkMoveBothDirections(sourcePosition, targetPosition, 36) ||
-      checkMoveBothDirections(sourcePosition, targetPosition, 45) ||
-      checkMoveBothDirections(sourcePosition, targetPosition, 54) ||
-      checkMoveBothDirections(sourcePosition, targetPosition, 63);
+
+    return isInDiagonal(sourcePosition, targetPosition);
   }
 
   function isKingMove(sourcePosition: number, targetPosition: number): boolean {
@@ -195,7 +187,6 @@ export function Home() {
   }
 
   function isKnightMove(sourcePosition: number, targetPosition: number): boolean {
-    console.log("Knight move", sourcePosition, targetPosition, sourcePosition - targetPosition);
     //17, 15, 10, 6, -6, -10, -15, -17
     return checkMove(sourcePosition, targetPosition, 17) ||
           checkMoveBothDirections(sourcePosition, targetPosition, 15) ||
