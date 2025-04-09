@@ -135,8 +135,24 @@ export function Home() {
   });
   // Drop zones with array's that store the widgets dropped in them (Data for future Ai responses (stock fish and GPT))
 
+  function isValidMove(piece:string, sourcePosition: number, targetPosition: number): boolean {
+
+    if(piece.slice(1) === 'Pawn' && (targetPosition === sourcePosition - 8)) {
+      return true;
+    }
+    if(piece.slice(1) === 'Rook' && (targetPosition === sourcePosition + 8)) {
+      return true;
+    }
+    
+    return false;
+  }
+
   const handleDrop = (piece: string, targetPosition: number, sourcePosition: number) => {
     setBoardState((prev) => {
+      if(!isValidMove(piece, sourcePosition, targetPosition)) {
+        console.error("Invalid move from", sourcePosition, "to", targetPosition);
+        return prev; // Invalid move, return previous state
+      }
       // record new state
       const newState = {...prev};
       newState[sourcePosition] = null;
