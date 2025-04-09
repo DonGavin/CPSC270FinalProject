@@ -134,14 +134,50 @@ export function Home() {
     63: "WRook",
   });
   // Drop zones with array's that store the widgets dropped in them (Data for future Ai responses (stock fish and GPT))
+  function isPawnMove(sourcePosition: number, targetPosition: number): boolean {
+    //needs to change this so that it can move 2 spaces on first move
+    return (targetPosition === sourcePosition - 8) || (targetPosition === sourcePosition - 16);
+  }
+
+  function isRookMove(sourcePosition: number, targetPosition: number): boolean {
+    return  (targetPosition === sourcePosition - 8);
+  }
+
+  function isBishopMove(sourcePosition: number, targetPosition: number): boolean {
+    return true;
+  }
+
+  function isKingMove(sourcePosition: number, targetPosition: number): boolean {
+    return true;
+  }
+
+  function isQueenMove(sourcePosition: number, targetPosition: number): boolean {
+    return true;
+  }
+
+  function isKnightMove(sourcePosition: number, targetPosition: number): boolean {
+    return true;
+  }
 
   function isValidMove(piece:string, sourcePosition: number, targetPosition: number): boolean {
 
-    if(piece.slice(1) === 'Pawn' && (targetPosition === sourcePosition - 8)) {
-      return true;
+    if(piece.slice(1) === 'Pawn') {
+      return isPawnMove(sourcePosition, targetPosition);
     }
-    if(piece.slice(1) === 'Rook' && (targetPosition === sourcePosition + 8)) {
-      return true;
+    if(piece.slice(1) === 'Rook') {
+      return isRookMove(sourcePosition, targetPosition);
+    }
+    if(piece.slice(1) === 'Bishop') {
+      return isBishopMove(sourcePosition, targetPosition);
+    }
+    if(piece.slice(1) === 'King') {
+      return isKingMove(sourcePosition, targetPosition);
+    }
+    if(piece.slice(1) === 'Queen') {
+      return isQueenMove(sourcePosition, targetPosition);
+    }
+    if(piece.slice(1) === 'Knight') {
+      return isKnightMove(sourcePosition, targetPosition);
     }
     
     return false;
