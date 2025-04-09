@@ -181,6 +181,7 @@ export function Home() {
           width: '100%',
           maxWidth: 'min(90vh, 90vw)',
           aspectRatio: '4/3',
+          backgroundColor: 'red',
         }}>
           <div style={{ 
             display: 'grid',
