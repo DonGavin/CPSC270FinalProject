@@ -134,6 +134,15 @@ export function Home() {
     63: "WRook",
   });
   // Drop zones with array's that store the widgets dropped in them (Data for future Ai responses (stock fish and GPT))
+
+  function checkMove(sourcePosition: number, targetPosition: number, move: number): boolean {
+    return targetPosition === sourcePosition + move;
+  }
+
+  function checkMoveBothDirections(sourcePosition: number, targetPosition: number, move: number): boolean {
+    return checkMove(sourcePosition, targetPosition, move) || checkMove(sourcePosition, targetPosition, -move);
+  }
+
   function isPawnMove(sourcePosition: number, targetPosition: number): boolean {
     //needs to change this so that it can move 2 spaces on first move
     return (targetPosition === sourcePosition - 8) || (targetPosition === sourcePosition - 16);
@@ -148,14 +157,10 @@ export function Home() {
   }
 
   function isKingMove(sourcePosition: number, targetPosition: number): boolean {
-    return (targetPosition === sourcePosition - 1) || 
-    (targetPosition === sourcePosition + 1) || 
-    (targetPosition === sourcePosition - 7) || 
-    (targetPosition === sourcePosition + 7) || 
-    (targetPosition === sourcePosition - 8) ||
-    (targetPosition === sourcePosition + 8) || 
-    (targetPosition === sourcePosition - 9) || 
-    (targetPosition === sourcePosition + 9);
+    return (checkMoveBothDirections(sourcePosition, targetPosition, 1)) || 
+    (checkMoveBothDirections(sourcePosition, targetPosition, 7)) ||
+    (checkMoveBothDirections(sourcePosition, targetPosition, 8)) ||
+    (checkMoveBothDirections(sourcePosition, targetPosition, 9));
   }
 
   function isQueenMove(sourcePosition: number, targetPosition: number): boolean {
