@@ -146,6 +146,8 @@ export function Home() {
   function isPawnMove(sourcePosition: number, targetPosition: number): boolean {
     //needs to change this so that it can move 2 spaces on first move
     //also needs movement to take other pawns
+    //also needs en passant
+    //also needs to promotion on other side of the board
     return checkMove(sourcePosition, targetPosition, 8) || checkMove(sourcePosition, targetPosition, 16);
   }
 
