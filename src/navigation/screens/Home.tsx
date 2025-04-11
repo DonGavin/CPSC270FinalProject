@@ -135,6 +135,12 @@ export function Home() {
   });
   // Drop zones with array's that store the widgets dropped in them (Data for future Ai responses (stock fish and GPT))
 
+  // needs to be coded to check if the pieces ahead
+  //logic to other movement restrictions already applied, just needs logic to check if pieces are in the positions ahead
+  function piecesAhead(sourcePosition: number, targetPosition: number): boolean {
+    return true;
+  }
+
   function checkMove(sourcePosition: number, targetPosition: number, move: number): boolean {
     return targetPosition === sourcePosition - move;
   }
@@ -148,7 +154,7 @@ export function Home() {
     //also needs movement to take other pawns
     //also needs en passant
     //also needs to promotion on other side of the board
-    return checkMove(sourcePosition, targetPosition, 8) || checkMove(sourcePosition, targetPosition, 16);
+    return !piecesAhead(sourcePosition, targetPosition)&&(checkMove(sourcePosition, targetPosition, 8) || checkMove(sourcePosition, targetPosition, 16));
   }
 
   function isInRow(sourcePosition: number, targetPosition: number): boolean {
@@ -160,7 +166,7 @@ export function Home() {
   }
 
   function isRookMove(sourcePosition: number, targetPosition: number): boolean {
-    return  isInRow(sourcePosition, targetPosition) || isInColumn(sourcePosition, targetPosition);
+    return  !piecesAhead(sourcePosition,targetPosition)&&(isInRow(sourcePosition, targetPosition) || isInColumn(sourcePosition, targetPosition));
   }
 
   function isInDiagonal(sourcePosition: number, targetPosition: number): boolean {
@@ -168,7 +174,7 @@ export function Home() {
   }
 
   function isBishopMove(sourcePosition: number, targetPosition: number): boolean {
-    return isInDiagonal(sourcePosition, targetPosition);
+    return !piecesAhead(sourcePosition,targetPosition)&&isInDiagonal(sourcePosition, targetPosition);
   }
 
   function isKingMove(sourcePosition: number, targetPosition: number): boolean {
@@ -184,7 +190,7 @@ export function Home() {
 
   function isKnightMove(sourcePosition: number, targetPosition: number): boolean {
     //17, 15, 10, 6, -6, -10, -15, -17
-    return checkMove(sourcePosition, targetPosition, 17) ||
+    return checkMoveBothDirections(sourcePosition, targetPosition, 17) ||
           checkMoveBothDirections(sourcePosition, targetPosition, 15) ||
           checkMoveBothDirections(sourcePosition, targetPosition, 10) ||
           checkMoveBothDirections(sourcePosition, targetPosition, 6);
