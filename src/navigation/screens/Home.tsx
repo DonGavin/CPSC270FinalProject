@@ -139,7 +139,12 @@ export function Home() {
   //logic to other movement restrictions already applied, just needs logic to check if pieces are in the positions ahead
   function piecesAhead(piece: string, sourcePosition: number, targetPosition: number): boolean {
     const direction = Math.sign(targetPosition - sourcePosition);
-    return boardState[targetPosition] === null;
+    const targetPiece = boardState[targetPosition];
+    const currentPiece = boardState[sourcePosition];
+    if(targetPiece ===null) {
+      return false;
+    }
+    return targetPiece[0] === currentPiece[0];
   }
 
   function checkMove(sourcePosition: number, targetPosition: number, move: number): boolean {
