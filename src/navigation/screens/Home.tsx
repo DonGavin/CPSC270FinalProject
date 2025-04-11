@@ -137,6 +137,7 @@ export function Home() {
 
   const [algebraicMove, setAlgebraicMove] = useState<string>(""); // Input for algebraic moves
   const [chatGPTResponse, setChatGPTResponse] = useState<string>(""); // ChatGPT response
+  const [moveHistory, setMoveHistory] = useState<string[]>([]); // List of all moves
 
   // Convert board position to algebraic notation (e.g., 0 -> "a8", 63 -> "h1")
   const positionToAlgebraic = (position: number): string => {
@@ -255,7 +256,7 @@ export function Home() {
     console.log("Move in algebraic notation:", move);
   
     setAlgebraicMove(move); // Update the algebraic move state
-  
+    setMoveHistory((prev) => [...prev, move]); // Append the move to the history
     setBoardState((prev) => {
       if (!isValidMove(piece, sourcePosition, targetPosition)) {
         console.error("Invalid move from", sourcePosition, "to", targetPosition);
@@ -274,20 +275,40 @@ export function Home() {
   const handleRemove = (position: number) => {
     const positionAlgebraic = positionToAlgebraic(position); // Convert position to algebraic notation
     const piece = boardState[position]; // Get the piece being captured
-  
+
     if (piece) {
       const pieceType = piece.slice(1); // Extract the piece type (e.g., "Rook", "Knight")
       const pieceSymbol = pieceType[0].toUpperCase(); // Use the first letter of the piece type (e.g., "R" for Rook)
-      console.log(`${pieceSymbol}x${positionAlgebraic}`); // Log the capture in algebraic notation
+      const captureMove = `${pieceSymbol}x${positionAlgebraic}`;
+      console.log(captureMove); // Log the capture in algebraic notation
+
+      setMoveHistory((prev) => [...prev, captureMove]); // Append the capture to the history
     } else {
       console.error("No piece to capture at", positionAlgebraic); // Handle edge case
     }
-  
+
     setBoardState((prev) => ({
       ...prev,
       [position]: null, // Remove piece from position
     }));
   };
+
+ // Render the move history in the side panel
+ const renderMoveHistory = () => {
+  return (
+    <div>
+      <h4>Move History</h4>
+      <ul style={{ maxHeight: '200px', overflowY: 'auto', padding: '0', listStyle: 'none' }}>
+        {moveHistory.map((move, index) => (
+          <li key={index} style={{ marginBottom: '5px' }}>
+            {index + 1}. {move}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
   // create basic board with loop 
   const render = () => {
     const squares = [];
@@ -394,6 +415,8 @@ export function Home() {
               </div>
             )}
           </div>
+           {/* Move History Section */}
+           {renderMoveHistory()}
         </div>
       </div>
     </DndProvider>
