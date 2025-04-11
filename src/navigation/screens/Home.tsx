@@ -269,9 +269,18 @@ export function Home() {
   };
   // Handle removal (piece take)
   const handleRemove = (position: number) => {
-    setBoardState((prev)=> ({
+    const positionAlgebraic = positionToAlgebraic(position); // Convert position to algebraic notation
+    const piece = boardState[position]; // Get the piece being captured
+  
+    if (piece) {
+      console.log(`${piece[1]}x${positionAlgebraic}`); // Log the capture in algebraic notation
+    } else {
+      console.error("No piece to capture at", positionAlgebraic); // Handle edge case
+    }
+  
+    setBoardState((prev) => ({
       ...prev,
-      [position]: null, // remove piece from position
+      [position]: null, // Remove piece from position
     }));
   };
   // create basic board with loop 
