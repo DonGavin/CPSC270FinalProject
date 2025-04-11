@@ -248,7 +248,10 @@ export function Home() {
   const handleDrop = (piece: string, targetPosition: number, sourcePosition: number) => {
     const sourceAlgebraic = positionToAlgebraic(sourcePosition);
     const targetAlgebraic = positionToAlgebraic(targetPosition);
-    const move = `${sourceAlgebraic}-${targetAlgebraic}`;
+    const pieceType = piece.slice(1); // Extract the piece type (e.g., "Rook", "Knight")
+    const pieceSymbol = pieceType[0].toUpperCase(); // Use the first letter of the piece type (e.g., "R" for Rook)
+  
+    const move = `${pieceSymbol}${sourceAlgebraic}-${targetAlgebraic}`;
     console.log("Move in algebraic notation:", move);
   
     setAlgebraicMove(move); // Update the algebraic move state
@@ -273,7 +276,9 @@ export function Home() {
     const piece = boardState[position]; // Get the piece being captured
   
     if (piece) {
-      console.log(`${piece[1]}x${positionAlgebraic}`); // Log the capture in algebraic notation
+      const pieceType = piece.slice(1); // Extract the piece type (e.g., "Rook", "Knight")
+      const pieceSymbol = pieceType[0].toUpperCase(); // Use the first letter of the piece type (e.g., "R" for Rook)
+      console.log(`${pieceSymbol}x${positionAlgebraic}`); // Log the capture in algebraic notation
     } else {
       console.error("No piece to capture at", positionAlgebraic); // Handle edge case
     }
