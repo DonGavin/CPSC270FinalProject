@@ -189,11 +189,17 @@ export function Home() {
   }
 
   function isPawnMove(sourcePosition: number, targetPosition: number): boolean {
-    //needs to change this so that it can move 2 spaces on first move
-    //also needs movement to take other pawns
     //also needs en passant
-    //also needs to promotion on other side of the board
-    return !piecesAhead('Pawn',sourcePosition, targetPosition)&&(checkMove(sourcePosition, targetPosition, 8) || checkMove(sourcePosition, targetPosition, 16));
+    
+    //promotion in handle drop function
+    
+    //checks movement for attack
+    if(boardState[targetPosition] !== null) {
+      return checkMove(sourcePosition, targetPosition, 7) || checkMove(sourcePosition, targetPosition, 9);
+    }
+    //checks movement for normal move
+    return checkMove(sourcePosition, targetPosition, 8) || 
+    (checkMove(sourcePosition, targetPosition, 16)&&(Math.floor(sourcePosition/8) === 6));
   }
 
   function isInRow(sourcePosition: number, targetPosition: number): boolean {
