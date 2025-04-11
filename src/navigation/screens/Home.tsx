@@ -277,6 +277,9 @@ export function Home() {
       // remove piece from old position (source)
       newState[targetPosition] = piece;
       // update piece position replaceing any existing value (piece)
+      if(piece === "WPawn" && Math.floor(targetPosition/8) === 0) {
+        newState[targetPosition] = "WQueen";
+      }
       return newState; //return new board state 
     });
   };
