@@ -189,11 +189,13 @@ export function Home() {
   }
 
   function isPawnMove(sourcePosition: number, targetPosition: number): boolean {
-    //needs to change this so that it can move 2 spaces on first move
+    const isFirstMove = sourcePosition >= 48 && sourcePosition <= 55;
     //also needs movement to take other pawns
     //also needs en passant
     //also needs to promotion on other side of the board
-    return !piecesAhead('Pawn',sourcePosition, targetPosition)&&(checkMove(sourcePosition, targetPosition, 8) || checkMove(sourcePosition, targetPosition, 16));
+    return !piecesAhead('Pawn',sourcePosition, targetPosition)&&
+    (checkMove(sourcePosition, targetPosition, 8) || 
+    (isFirstMove &&checkMove(sourcePosition, targetPosition, 16)));
   }
 
   function isInRow(sourcePosition: number, targetPosition: number): boolean {
