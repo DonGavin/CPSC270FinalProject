@@ -254,29 +254,66 @@ export function Home() {
   }
   return (
     <DndProvider backend={HTML5Backend}>
-
-<div style={{
-        display: 'center',
+      <div style={{
+        display: 'flex', // Use flexbox to place the chessboard and side panel side by side
         justifyContent: 'center',
-        alignItems: 'center',
-        width: '25%',
-        height: '25%',
+        alignItems: 'flex-start',
+        width: '100%',
+        height: '100vh',
+        padding: '10px',
+        boxSizing: 'border-box',
       }}>
+        {/* Chessboard Section */}
         <div style={{
-          position: 'absolute',
-          top: '1%',
-          left: '25%',
+          width: '70%', // Adjust width as needed
+          maxWidth: 'min(90vh, 90vw)',
+          aspectRatio: '1',
           border: '2px solid #333',
         }}>
-          <div style={{ 
+          <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(8, 1fr)',
             gridTemplateRows: 'repeat(8, 1fr)',
-            // width: '25%',
-            // height: '25%',
-            
+            width: '100%',
+            height: '100%',
           }}>
             {render()}
+          </div>
+        </div>
+  
+        {/* Side Panel Section */}
+        <div style={{
+          width: '30%', // Adjust width as needed
+          marginLeft: '20px',
+          padding: '10px',
+          border: '2px solid #333',
+          borderRadius: '5px',
+          backgroundColor: '#f9f9f9',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px',
+        }}>
+          <h3>API Interaction</h3>
+          {/* Stockfish Section */}
+          <div>
+            <h4>Stockfish</h4>
+            <button onClick={() => console.log('Stockfish Move')}>Get Best Move</button>
+          </div>
+  
+          {/* ChatGPT Section */}
+          <div>
+            <h4>ChatGPT</h4>
+            <textarea
+              placeholder="Ask ChatGPT about the game..."
+              rows={5}
+              style={{
+                width: '100%',
+                padding: '5px',
+                borderRadius: '5px',
+                border: '1px solid #ccc',
+              }}
+            />
+            <button onClick={() => console.log('ChatGPT Response')}>Ask ChatGPT</button>
           </div>
         </div>
       </div>
