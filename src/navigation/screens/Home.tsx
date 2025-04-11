@@ -137,8 +137,9 @@ export function Home() {
 
   // needs to be coded to check if the pieces ahead
   //logic to other movement restrictions already applied, just needs logic to check if pieces are in the positions ahead
-  function piecesAhead(sourcePosition: number, targetPosition: number): boolean {
-    return true;
+  function piecesAhead(piece: string, sourcePosition: number, targetPosition: number): boolean {
+    const direction = Math.sign(targetPosition - sourcePosition);
+    return boardState[targetPosition] === null;
   }
 
   function checkMove(sourcePosition: number, targetPosition: number, move: number): boolean {
@@ -154,7 +155,7 @@ export function Home() {
     //also needs movement to take other pawns
     //also needs en passant
     //also needs to promotion on other side of the board
-    return !piecesAhead(sourcePosition, targetPosition)&&(checkMove(sourcePosition, targetPosition, 8) || checkMove(sourcePosition, targetPosition, 16));
+    return !piecesAhead('Pawn',sourcePosition, targetPosition)&&(checkMove(sourcePosition, targetPosition, 8) || checkMove(sourcePosition, targetPosition, 16));
   }
 
   function isInRow(sourcePosition: number, targetPosition: number): boolean {
@@ -166,7 +167,7 @@ export function Home() {
   }
 
   function isRookMove(sourcePosition: number, targetPosition: number): boolean {
-    return  !piecesAhead(sourcePosition,targetPosition)&&(isInRow(sourcePosition, targetPosition) || isInColumn(sourcePosition, targetPosition));
+    return  !piecesAhead('Rook', sourcePosition,targetPosition)&&(isInRow(sourcePosition, targetPosition) || isInColumn(sourcePosition, targetPosition));
   }
 
   function isInDiagonal(sourcePosition: number, targetPosition: number): boolean {
@@ -174,7 +175,7 @@ export function Home() {
   }
 
   function isBishopMove(sourcePosition: number, targetPosition: number): boolean {
-    return !piecesAhead(sourcePosition,targetPosition)&&isInDiagonal(sourcePosition, targetPosition);
+    return !piecesAhead('Bishop',sourcePosition,targetPosition)&&isInDiagonal(sourcePosition, targetPosition);
   }
 
   function isKingMove(sourcePosition: number, targetPosition: number): boolean {
