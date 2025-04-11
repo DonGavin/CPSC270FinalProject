@@ -138,13 +138,46 @@ export function Home() {
   // needs to be coded to check if the pieces ahead
   //logic to other movement restrictions already applied, just needs logic to check if pieces are in the positions ahead
   function piecesAhead(piece: string, sourcePosition: number, targetPosition: number): boolean {
-    const direction = Math.sign(targetPosition - sourcePosition);
     const targetPiece = boardState[targetPosition];
     const currentPiece = boardState[sourcePosition];
-    if(targetPiece ===null) {
+    const sourceRow = Math.floor(sourcePosition / 8);
+    const sourceCol = sourcePosition % 8;
+    const targetRow = Math.floor(targetPosition / 8);
+    const targetCol = targetPosition % 8;
+
+    let step: number | null = null;
+
+    // Horizontal movement.
+    if (sourceRow === targetRow) {
+      step = targetCol > sourceCol ? 1 : -1;
+    }
+    // Vertical movement.
+    else if (sourceCol === targetCol) {
+      step = targetRow > sourceRow ? 8 : -8;
+    }
+    // Diagonal movement.
+    else if (Math.abs(sourceRow - targetRow) === Math.abs(sourceCol - targetCol)) {
+      const rowStep = targetRow > sourceRow ? 1 : -1;
+      const colStep = targetCol > sourceCol ? 1 : -1;
+      step = rowStep * 8 + colStep;
+    }
+    // For non-straight and non-diagonal moves (e.g. knight), no iteration is needed.
+    else {
       return false;
     }
-    return targetPiece[0] === currentPiece[0];
+
+    // Check every square between source and target (exclusive) 
+    let current = sourcePosition + step;
+    while (current !== targetPosition) {
+      if (boardState[current] !== null) {
+        return true; // There is a blocking piece in between.
+      }
+      current += step;
+    }
+    if(targetPiece === null) {
+      return false; // The target square is empty.
+    }
+    return targetPiece[0]==='W'; // The path is clear.
   }
 
   function checkMove(sourcePosition: number, targetPosition: number, move: number): boolean {
