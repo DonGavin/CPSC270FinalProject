@@ -135,6 +135,37 @@ export function Home() {
   });
   // Drop zones with array's that store the widgets dropped in them (Data for future Ai responses (stock fish and GPT))
 
+  const [algebraicMove, setAlgebraicMove] = useState<string>(""); // Input for algebraic moves
+  const [chatGPTResponse, setChatGPTResponse] = useState<string>(""); // ChatGPT response
+
+  // Convert board position to algebraic notation (e.g., 0 -> "a8", 63 -> "h1")
+  const positionToAlgebraic = (position: number): string => {
+    const file = String.fromCharCode(97 + (position % 8)); // 'a' to 'h'
+    const rank = 8 - Math.floor(position / 8); // 8 to 1
+    return `${file}${rank}`;
+  };
+
+  // Handle Stockfish API call
+  const handleStockfishMove = () => {
+    console.log("Sending move to Stockfish:", algebraicMove);
+    // Replace with actual Stockfish API call
+    // Example:
+    // fetch('/stockfish-api', { method: 'POST', body: JSON.stringify({ move: algebraicMove }) })
+    //   .then(response => response.json())
+    //   .then(data => console.log("Stockfish response:", data));
+  };
+
+  // Handle ChatGPT API call
+  const handleChatGPTQuery = () => {
+    console.log("Sending query to ChatGPT:", algebraicMove);
+    // Replace with actual ChatGPT API call
+    // Example:
+    // fetch('/chatgpt-api', { method: 'POST', body: JSON.stringify({ query: algebraicMove }) })
+    //   .then(response => response.json())
+    //   .then(data => setChatGPTResponse(data.response));
+  };
+
+
   function checkMove(sourcePosition: number, targetPosition: number, move: number): boolean {
     return targetPosition === sourcePosition - move;
   }
@@ -215,18 +246,25 @@ export function Home() {
   }
 
   const handleDrop = (piece: string, targetPosition: number, sourcePosition: number) => {
+    const sourceAlgebraic = positionToAlgebraic(sourcePosition);
+    const targetAlgebraic = positionToAlgebraic(targetPosition);
+    const move = `${sourceAlgebraic}-${targetAlgebraic}`;
+    console.log("Move in algebraic notation:", move);
+  
+    setAlgebraicMove(move); // Update the algebraic move state
+  
     setBoardState((prev) => {
-      if(!isValidMove(piece, sourcePosition, targetPosition)) {
+      if (!isValidMove(piece, sourcePosition, targetPosition)) {
         console.error("Invalid move from", sourcePosition, "to", targetPosition);
         return prev; // Invalid move, return previous state
       }
-      // record new state
-      const newState = {...prev};
+      // Record new state
+      const newState = { ...prev };
       newState[sourcePosition] = null;
-      // remove piece from old position (source)
+      // Remove piece from old position (source)
       newState[targetPosition] = piece;
-      // update piece position replaceing any existing value (piece)
-      return newState; //return new board state 
+      // Update piece position, replacing any existing value (piece)
+      return newState; // Return new board state
     });
   };
   // Handle removal (piece take)
@@ -297,7 +335,20 @@ export function Home() {
           {/* Stockfish Section */}
           <div>
             <h4>Stockfish</h4>
-            <button onClick={() => console.log('Stockfish Move')}>Get Best Move</button>
+            <input
+              type="text"
+              value={algebraicMove}
+              onChange={(e) => setAlgebraicMove(e.target.value)}
+              placeholder="Enter move (e.g., e2-e4)"
+              style={{
+                width: '100%',
+                padding: '5px',
+                borderRadius: '5px',
+                border: '1px solid #ccc',
+                marginBottom: '10px',
+              }}
+            />
+            <button onClick={handleStockfishMove}>Send to Stockfish</button>
           </div>
   
           {/* ChatGPT Section */}
@@ -306,6 +357,8 @@ export function Home() {
             <textarea
               placeholder="Ask ChatGPT about the game..."
               rows={5}
+              value={algebraicMove}
+              onChange={(e) => setAlgebraicMove(e.target.value)}
               style={{
                 width: '100%',
                 padding: '5px',
@@ -313,7 +366,19 @@ export function Home() {
                 border: '1px solid #ccc',
               }}
             />
-            <button onClick={() => console.log('ChatGPT Response')}>Ask ChatGPT</button>
+            <button onClick={handleChatGPTQuery}>Ask ChatGPT</button>
+            {chatGPTResponse && (
+              <div style={{
+                marginTop: '10px',
+                padding: '10px',
+                border: '1px solid #ccc',
+                borderRadius: '5px',
+                backgroundColor: '#fff',
+              }}>
+                <strong>ChatGPT Response:</strong>
+                <p>{chatGPTResponse}</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
