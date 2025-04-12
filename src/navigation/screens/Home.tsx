@@ -21,7 +21,7 @@ function ChessPiece({
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
-  }),[piece, position]); // added position to dependency to make sure drag works correctly
+  }),[piece, position]); 
 
   return (
     <div
@@ -60,12 +60,12 @@ function BoardSquare({
     accept: ItemTypes.CHESS_PIECE,
     drop: (item: { piece: string; sourcePosition: number}) => {
       onDrop(item.piece, position, item.sourcePosition);
-      return {position}; // return position to be used in future chess tracking 
+      return {position}; 
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
-  }), [position, onDrop]); // added position to dependency to make sure drop works correctly
+  }), [position, onDrop]); 
 
   return (
     <div
@@ -133,10 +133,6 @@ export function Home() {
     62: "WKnight",
     63: "WRook",
   });
-  // Drop zones with array's that store the widgets dropped in them (Data for future Ai responses (stock fish and GPT))
-
-  // needs to be coded to check if the pieces ahead
-  //logic to other movement restrictions already applied, just needs logic to check if pieces are in the positions ahead
   function piecesAhead(piece: string, sourcePosition: number, targetPosition: number): boolean {
     const targetPiece = boardState[targetPosition];
     const currentPiece = boardState[sourcePosition];
@@ -175,9 +171,9 @@ export function Home() {
       current += step;
     }
     if(targetPiece === null) {
-      return false; // The target square is empty.
+      return false; 
     }
-    return targetPiece[0]==='W'; // The path is clear.
+    return targetPiece[0]==='W';
   }
 
   function checkMove(sourcePosition: number, targetPosition: number, move: number): boolean {
@@ -219,6 +215,7 @@ export function Home() {
   }
 
   function isKingMove(sourcePosition: number, targetPosition: number): boolean {
+
     return (checkMoveBothDirections(sourcePosition, targetPosition, 1)) || 
     (checkMoveBothDirections(sourcePosition, targetPosition, 7)) ||
     (checkMoveBothDirections(sourcePosition, targetPosition, 8)) ||
@@ -236,7 +233,69 @@ export function Home() {
           checkMoveBothDirections(sourcePosition, targetPosition, 10) ||
           checkMoveBothDirections(sourcePosition, targetPosition, 6);
   }
+ function disallowSelfCheck(piece: string, sourcePosition: number, targetPosition: number): {isSafe: boolean; isCheckMate: boolean} {
+  // simulate/snapshot board when move is made to check if king is in check before move is made (examine potential for aysnch)
+  const simulatedFutureBoardState = {...boardState}; 
+  simulatedFutureBoardState[sourcePosition] = null;
+  simulatedFutureBoardState[targetPosition] = piece;
+  const simulatedKingPosition = piece === 'WKing'
+  ? targetPosition: Object.keys(simulatedFutureBoardState).find(key => simulatedFutureBoardState[+key] === 'Wking');
+  const simKingPosNum= +simulatedKingPosition!;
+  for (const [pos, opponentPiece] of Object.entries(simulatedFutureBoardState)) {
+    if (opponentPiece && opponentPiece[0] === 'B') {
+      const opponentPos = +pos;
+      if (isValidMove(opponentPiece, opponentPos, simKingPosNum)){
+        return {isSafe: false, isCheckMate: false}; 
+      }
+    }
+  }
+  if (piece ==='WKing') {
+    // front one space = cur pos - 8 
+    //back one space = cur pos + 8
+    // left one space = cur pos - 1
+    //right one space = cur pos + 1
+    // diagonal left = cur pos - 9
+    // diagonal right = cur pos - 7
+    //diagonal backLeft = cur pos + 7
+    //diagonal backRight = cur pos + 9
+    const potentialKingMoves = [
+      simKingPosNum - 1, simKingPosNum + 1,
+      simKingPosNum - 8, simKingPosNum + 8,
+      simKingPosNum - 9, simKingPosNum - 7,
+      simKingPosNum + 9, simKingPosNum + 7
+    ];
+    let hasValidMove = false;
+    for (const move of potentialKingMoves){
+      if (move < 0 || move >= 64) continue;
+      const tempBoardState = {...simulatedFutureBoardState};
+      tempBoardState[simKingPosNum] = null;
+      tempBoardState[move] = 'WKing'; 
+      let isMoveSafe = true;
+      for (const [pos, opponentPiece] of Object.entries(tempBoardState)) {
+        if (opponentPiece && opponentPiece[0] === 'B') {
+          const opponentPos = +pos;
+          if (isValidMove(opponentPiece, opponentPos, move)){
+            isMoveSafe = false;
+            break; //Move is valid, no point in continuing loop (maybe saves memory/more efficient use of state?)
+          }
+        }
+      }
+      if (isMoveSafe) {
+        hasValidMove = true;
+        console.log("Valid move found for King at position", move);
+        break; // Move is safe, no need to continue loop (same as above)
+      }
+    }
 
+    console.log("Final hasValidMove value after eval of potential moves", hasValidMove) //debugging and making sure function validates correctly
+    
+    if (!hasValidMove) {
+      console.log("No valid moves for King at position", simKingPosNum);
+      return {isSafe: false, isCheckMate: true}; // No valid moves available (i.e. checkmate!)
+    }
+  }
+  return {isSafe: true, isCheckMate: false};
+ }
   function isValidMove(piece:string, sourcePosition: number, targetPosition: number): boolean {
 
     if(piece.slice(1) === 'Pawn') {
@@ -249,7 +308,22 @@ export function Home() {
       return isBishopMove(sourcePosition, targetPosition);
     }
     if(piece.slice(1) === 'King') {
-      return isKingMove(sourcePosition, targetPosition);
+      return (
+        isKingMove(sourcePosition, targetPosition) && 
+        (() => {
+          const {isSafe, isCheckMate} = disallowSelfCheck(piece, sourcePosition, targetPosition);
+          if (isCheckMate) {
+            console.log("Checkmate! Your cooked Pal!");
+          }
+          if (!isSafe) {
+            console.log("Unsafe Move! You cannot move the King into check Bozo!")
+          }
+          if (isSafe){
+            console.log("King is safe when moved from ", sourcePosition, "to", targetPosition);
+          }
+          return isSafe;
+        })()
+      );
     }
     if(piece.slice(1) === 'Queen') {
       return isQueenMove(sourcePosition, targetPosition);
@@ -260,30 +334,26 @@ export function Home() {
     
     return false;
   }
-
   const handleDrop = (piece: string, targetPosition: number, sourcePosition: number) => {
     setBoardState((prev) => {
       if(!isValidMove(piece, sourcePosition, targetPosition)) {
         console.error("Invalid move from", sourcePosition, "to", targetPosition);
-        return prev; // Invalid move, return previous state
+        return prev; 
       }
-      // record new state
       const newState = {...prev};
       newState[sourcePosition] = null;
-      // remove piece from old position (source)
       newState[targetPosition] = piece;
-      // update piece position replaceing any existing value (piece)
-      return newState; //return new board state 
+      return newState; 
     });
   };
-  // Handle removal (piece take)
+
   const handleRemove = (position: number) => {
     setBoardState((prev)=> ({
       ...prev,
-      [position]: null, // remove piece from position
+      [position]: null, 
     }));
   };
-  // create basic board with loop 
+
   const render = () => {
     const squares = [];
     for (let i = 0; i < 64; i++){
