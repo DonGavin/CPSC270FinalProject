@@ -308,6 +308,9 @@ export function Home() {
       return isBishopMove(sourcePosition, targetPosition);
     }
     if(piece.slice(1) === 'King') {
+      if(boardState[targetPosition] && boardState[targetPosition][0] ==='W'){
+        return false; 
+      }
       return (
         isKingMove(sourcePosition, targetPosition) && 
         (() => {
