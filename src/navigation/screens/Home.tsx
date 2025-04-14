@@ -135,7 +135,7 @@ export function Home() {
   });
   function piecesAhead(piece: string, sourcePosition: number, targetPosition: number): boolean {
     const targetPiece = boardState[targetPosition];
-    const currentPiece = boardState[sourcePosition];
+    // const currentPiece = boardState[sourcePosition];
     const sourceRow = Math.floor(sourcePosition / 8);
     const sourceCol = sourcePosition % 8;
     const targetRow = Math.floor(targetPosition / 8);
@@ -185,13 +185,17 @@ export function Home() {
   }
 
   function isPawnMove(sourcePosition: number, targetPosition: number): boolean {
-    const isFirstMove = sourcePosition >= 48 && sourcePosition <= 55;
-    //also needs movement to take other pawns
     //also needs en passant
-    //also needs to promotion on other side of the board
-    return !piecesAhead('Pawn',sourcePosition, targetPosition)&&
-    (checkMove(sourcePosition, targetPosition, 8) || 
-    (isFirstMove &&checkMove(sourcePosition, targetPosition, 16)));
+    
+    //promotion in handle drop function
+    
+    //checks movement for attack
+    if(boardState[targetPosition] !== null) {
+      return checkMove(sourcePosition, targetPosition, 7) || checkMove(sourcePosition, targetPosition, 9);
+    }
+    //checks movement for normal move
+    return checkMove(sourcePosition, targetPosition, 8) || 
+    (checkMove(sourcePosition, targetPosition, 16)&&(Math.floor(sourcePosition/8) === 6));
   }
 
   function isInRow(sourcePosition: number, targetPosition: number): boolean {
@@ -346,7 +350,11 @@ export function Home() {
       const newState = {...prev};
       newState[sourcePosition] = null;
       newState[targetPosition] = piece;
-      return newState; 
+      // update piece position replaceing any existing value (piece)
+      if(piece === "WPawn" && Math.floor(targetPosition/8) === 0) {
+        newState[targetPosition] = "WQueen";
+      }
+      return newState; //return new board state 
     });
   };
 
