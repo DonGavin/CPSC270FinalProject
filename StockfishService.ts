@@ -1,4 +1,6 @@
 import { Chess, Square } from 'chess.js';
+import { Platform } from 'react-native';
+import { Asset } from 'expo-asset';
 
 export class StockfishService {
   private stockfish: Worker | null = null;
@@ -16,11 +18,30 @@ export class StockfishService {
     this.init();
   }
 
-  init() {
+  async init() {
     try {
-      // Use CDN for Expo web view
-      this.stockfish = new Worker('node_modules/stockfish.js/stockfish.js');
-      // For local: this.stockfish = new Worker('/stockfish.js');
+      if (Platform.OS === 'web') {
+        // Web: Create a proxy worker that loads the CDN script
+        const workerCode = `
+          try {
+            importScripts('https://cdn.jsdelivr.net/npm/stockfish.js@10.0.2/stockfish.js');
+            self.postMessage('Worker ready');
+          } catch(e) {
+            self.postMessage('Worker error: ' + e.message);
+          }
+        `;
+        const blob = new Blob([workerCode], { type: 'application/javascript' });
+        this.stockfish = new Worker(URL.createObjectURL(blob));
+      } else {
+        // Mobile: Same approach works for native
+        const workerCode = `
+          importScripts('https://cdn.jsdelivr.net/npm/stockfish.js@10.0.2/stockfish.js');
+          self.postMessage('Worker ready');
+        `;
+        const blob = new Blob([workerCode], { type: 'application/javascript' });
+        this.stockfish = new Worker(URL.createObjectURL(blob));
+      }
+
       this.stockfish.onmessage = (event) => {
         const message = event.data;
         console.log('Stockfish message:', message);
@@ -66,6 +87,7 @@ export class StockfishService {
       console.error('Failed to initialize Stockfish:', error);
     }
   }
+
 
   onReady(callback: () => void) {
     this.callbacks.onReady = callback;

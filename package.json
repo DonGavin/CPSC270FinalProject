@@ -40,7 +40,15 @@
     "@babel/core": "^7.20.0",
     "@types/chess.js": "^0.13.7",
     "@types/react": "~18.3.12",
+    "copy-webpack-plugin": "^13.0.0",
     "typescript": "^5.7.2"
+  },
+  "expo":{
+    "packagerOpts": {
+      "config": "metro.config.js",
+      "sourceExts": ["js", "jsx", "ts", "tsx"],
+      "assetExts": ["js", "wasm", "json", "png", "ttf"]
+    }
   },
   "private": true
 }
