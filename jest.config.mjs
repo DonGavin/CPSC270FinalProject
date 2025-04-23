@@ -3,6 +3,9 @@ export default {
   transform: {
     "^.+\\.tsx?$": ["ts-jest", {
       useESM: true,
+      tsconfig: {
+        jsx: "react-jsx"
+      }
     }],
   },
   extensionsToTreatAsEsm: [".ts", ".tsx"],
