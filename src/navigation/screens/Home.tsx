@@ -233,13 +233,18 @@ export function Home() {
       newState[sourcePosition] = null;
       if (piece === 'WPawn' && Math.floor(targetPosition / 8) === 0) {
         newState[targetPosition] = 'WQueen';
-        recordMove(sourcePosition, targetPosition, 'WQueen', newState, false);
+        // recordMove(sourcePosition, targetPosition, 'WQueen', newState, false);
       } else {
         newState[targetPosition] = piece;
-        recordMove(sourcePosition, targetPosition, piece, newState, false);
+        // recordMove(sourcePosition, targetPosition, piece, newState, false);
       }
-      setIsWhiteTurn(false);
+      // setIsWhiteTurn(false);
       return newState;
+    });
+    setBoardState(updatedState => {
+      recordMove(sourcePosition, targetPosition, piece, updatedState, false);
+      setIsWhiteTurn(false);
+      return updatedState;
     });
   };
 
