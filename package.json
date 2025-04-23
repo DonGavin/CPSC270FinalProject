@@ -1,12 +1,15 @@
 {
+  "type": "module",
   "name": "cpsc270final",
   "version": "1.0.0",
   "main": "index.tsx",
+
   "scripts": {
     "start": "expo start --dev-client",
     "web": "expo start --web",
     "android": "expo run:android",
-    "ios": "expo run:ios"
+    "ios": "expo run:ios",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "dependencies": {
     "@expo/metro-runtime": "~4.0.0",
@@ -20,6 +23,7 @@
     "expo-dev-client": "~5.0.4",
     "expo-splash-screen": "~0.29.13",
     "expo-system-ui": "~4.0.4",
+    "jest-environment-jsdom": "^29.7.0",
     "react": "18.3.1",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
@@ -38,16 +42,32 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
     "@types/chess.js": "^0.13.7",
+    "@types/jest": "^29.5.14",
     "@types/react": "~18.3.12",
     "copy-webpack-plugin": "^13.0.0",
-    "typescript": "^5.7.2"
+    "jest": "^29.7.0",
+    "ts-jest": "^29.3.2",
+    "typescript": "^5.8.3"
   },
-  "expo":{
+  "expo": {
     "packagerOpts": {
       "config": "metro.config.js",
-      "sourceExts": ["js", "jsx", "ts", "tsx"],
-      "assetExts": ["js", "wasm", "json", "png", "ttf"]
+      "sourceExts": [
+        "js",
+        "jsx",
+        "ts",
+        "tsx"
+      ],
+      "assetExts": [
+        "js",
+        "wasm",
+        "json",
+        "png",
+        "ttf"
+      ]
     }
   },
   "private": true

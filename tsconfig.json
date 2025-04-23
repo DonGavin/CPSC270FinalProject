@@ -1,8 +1,12 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "strict": true,
-    "module": "es2020"
+    "module": "es2020",
+    "esModuleInterop": true,
+    "jsx": "react",
+    "types": ["jest", "node"],
+    "allowSyntheticDefaultImports": true
   }
 }
