@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import {ImageBackground} from 'react-native';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useStockfish } from './useStockfish';
 import { Chess } from 'chess.js';
+import Chess_Background from '../../assets/Chess_Background.png';
 
 const ItemTypes = {
   CHESS_PIECE: 'chess_piece',
@@ -288,6 +290,7 @@ export function Home() {
 
   return (
     <DndProvider backend={HTML5Backend}>
+      <ImageBackground source={Chess_Background}>
       <div
         style={{
           display: 'flex',
@@ -314,7 +317,6 @@ export function Home() {
           >
             {render()}
           </div>
-          {/* UI Feedback */}
           <div style={{ position: 'absolute', top: 10, left: 10, color: 'black' }}>
             {isThinking ? 'Thinking...' : `Evaluation: ${evaluation || 'N/A'}`}
           </div>
@@ -326,6 +328,7 @@ export function Home() {
           </div>
         </div>
       </div>
+      </ImageBackground>
     </DndProvider>
   );
 }
