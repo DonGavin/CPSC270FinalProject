@@ -320,7 +320,7 @@ export function Home() {
           <div style={{ position: 'absolute', top: 10, left: 10, color: 'black' }}>
             {isThinking ? 'Thinking...' : `Evaluation: ${evaluation || 'N/A'}`}
           </div>
-          <div style={{ position: 'absolute', right: 10, maxWidth: 200, color: 'black' }}>
+          <div style={{ position: 'fixed', right: 10, top: 10, maxWidth: 200, color: 'black', backgroundColor: 'grey', overflowY: 'auto', borderRadius: 4, padding: 8}}>
             <h3>Move History</h3>
             {moveHistory.map((move, index) => (
               <div key={index}>{`${move.piece}: ${positionToAlgebraic(move.from)} → ${positionToAlgebraic(move.to)}`}</div>
