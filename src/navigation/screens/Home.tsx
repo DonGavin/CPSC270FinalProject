@@ -116,7 +116,7 @@ export function Home() {
     setOption,
     recordMove,
   } = useStockfish();
-
+  const [difficulty, setDifficulty] = useState(10); // 0-20
   const [isWhiteTurn, setIsWhiteTurn] = useState(true);
   const [boardState, setBoardState] = useState<{
     [key: number]: string | null;
@@ -192,7 +192,7 @@ export function Home() {
   useEffect(() => {
     // This is where we could configure stockfish options
     if (isReady) {
-      setOption("Skill Level", 10); // Adjust for User difficulty (0-20) if have time
+      setOption("Skill Level", difficulty); // Adjust for User difficulty (0-20) if have time
       console.log("Stockfish isReady:", isReady, "isThinking:", isThinking);
       analyzePosition(boardState, 15, isWhiteTurn);
     }
@@ -344,6 +344,11 @@ export function Home() {
             height: "100vh",
           }}
         >
+          <div style = {{marginBottom:'10px', color: "black"}}>
+            <h2>Chess Game</h2>
+            <p>Difficulty: {difficulty}</p>
+            <input type="range" min="0" max="20" value={difficulty} onChange={(e) => setDifficulty(Number(e.target.value))}></input>
+          </div>
           <div
             style={{
               border: "2px solid #333",
