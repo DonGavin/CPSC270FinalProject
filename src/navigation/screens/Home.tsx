@@ -5,10 +5,27 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { useStockfish } from "./useStockfish";
 import { Chess } from "chess.js";
 import Chess_Background from "../../assets/Chess_Background.png";
+import { TouchBackend } from 'react-dnd-touch-backend';
+import { MultiBackend, TouchTransition, createTransition } from 'react-dnd-multi-backend';
+
 
 const ItemTypes = {
   CHESS_PIECE: "chess_piece",
 };
+
+const HTML5toTouch = {
+  backends: [
+    {
+      backend: HTML5Backend,
+      transition: createTransition('dragPreview', 0),
+    },
+    {
+      backend: TouchBackend,
+      options: { enableMouseEvents: true },
+      transition: TouchTransition,
+    },
+  ],
+}
 
 function ChessPiece({
   piece,
@@ -35,15 +52,15 @@ function ChessPiece({
       style={{
         opacity: isDragging ? 0.5 : 1,
         cursor: "grab",
-        padding: "0.5rem",
-        margin: "0.25rem",
+        padding: "0.25rem", 
+        margin: "0.1rem", 
         backgroundColor: piece[0] === "W" ? "white" : "black",
         color: piece[0] === "W" ? "black" : "white",
         border: "1px solid black",
-        width: "80%",
-        maxWidth: "80%",
+        width: "70%", 
+        maxWidth: "70%", 
         textAlign: "center",
-        fontSize: "min(1rem, 3vw)",
+        fontSize: "clamp(0.5rem, 2vw, 0.8rem)",
       }}
     >
       {piece}
@@ -95,6 +112,8 @@ function BoardSquare({
         alignItems: "center",
         justifyContent: "center",
         position: "relative",
+        padding: "0", 
+        boxSizing: "border-box", 
       }}
     >
       {piece && (
@@ -192,11 +211,11 @@ export function Home() {
   useEffect(() => {
     // This is where we could configure stockfish options
     if (isReady) {
-      setOption("Skill Level", difficulty); // Adjust for User difficulty (0-20) if have time
+      setOption("Skill Level", difficulty); // Use the difficulty state
       console.log("Stockfish isReady:", isReady, "isThinking:", isThinking);
       analyzePosition(boardState, 15, isWhiteTurn);
     }
-  }, [isReady, boardState, isWhiteTurn, analyzePosition, setOption]);
+  }, [isReady, boardState, isWhiteTurn, analyzePosition, setOption, difficulty]);
 
   useEffect(() => {
     console.log("Best Move:", bestMove, "Positions:", bestMovePositions);
@@ -332,75 +351,136 @@ export function Home() {
     return squares;
   };
 
-  return (
-    <DndProvider backend={HTML5Backend}>
-      <ImageBackground source={Chess_Background}>
+ 
+return (
+  <DndProvider backend={MultiBackend} options={HTML5toTouch}>
+    <ImageBackground source={Chess_Background}>
+    <div
+  className="main-container"
+  style={{
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    width: "100%",
+    height: "100vh",
+    padding: "2vh 0.5rem", 
+    boxSizing: "border-box",
+    position: "relative",
+    overflowY: "auto",
+  }}
+      >
+        
         <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100vh",
-          }}
+    className="board-container"
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      width: "min(450px, 80vw)", 
+      aspectRatio: "1 / 1",
+      position: "relative",
+      marginTop: "1rem", 
+    }}
         >
-          <div style = {{marginBottom:'10px', color: "black"}}>
-            <h2>Chess Game</h2>
-            <p>Difficulty: {difficulty}</p>
-            <input type="range" min="0" max="20" value={difficulty} onChange={(e) => setDifficulty(Number(e.target.value))}></input>
-          </div>
           <div
             style={{
-              border: "2px solid #333",
+              display: "grid",
+              gridTemplateColumns: "repeat(8, 1fr)",
+              gridTemplateRows: "repeat(8, 1fr)",
+              width: "100%",
+              height: "100%",
             }}
           >
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(8, 1fr)",
-                gridTemplateRows: "repeat(8, 1fr)",
-                width: "90vw",
-                maxWidth: "500px",
-                aspectRatio: "1/1",
-              }}
-            >
-              {render()}
-            </div>
-            <div
-              style={{
-                position: "absolute",
-                top: 10,
-                left: 10,
-                color: "black",
-              }}
-            >
-              {isThinking
-                ? "Thinking..."
-                : `Evaluation: ${evaluation || "N/A"}`}
-            </div>
-            <div
-              style={{
-                position: "fixed",
-                right: 10,
-                top: 10,
-                maxWidth: 200,
-                color: "black",
-                backgroundColor: "grey",
-                overflowY: "auto",
-                borderRadius: 4,
-                padding: 8,
-              }}
-            >
-              <h3>Move History</h3>
-              {moveHistory.map((move, index) => (
-                <div
-                  key={index}
-                >{`${move.piece}: ${positionToAlgebraic(move.from)} → ${positionToAlgebraic(move.to)}`}</div>
-              ))}
-            </div>
+            {render()}
           </div>
         </div>
-      </ImageBackground>
-    </DndProvider>
-  );
+
+        <div
+          style={{
+            width: "min(300px, 85vw)",
+            marginTop: "1rem",
+            marginBottom: "1rem",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "0.5rem"
+          }}
+        >
+          <label htmlFor="difficulty" style={{ color: "black", fontSize: "1rem" }}>
+            AI Difficulty: {difficulty}
+          </label>
+          <input
+            type="range"
+            id="difficulty"
+            min="0"
+            max="20"
+            value={difficulty}
+            onChange={(e) => setDifficulty(Number(e.target.value))}
+            style={{
+              width: "100%",
+              height: "24px"
+            }}
+          />
+        </div>
+
+        <div
+          className="move-history"
+          style={{
+            width: "min(300px, 85vw)",
+            color: "black",
+            backgroundColor: "grey",
+            overflowY: "auto",
+            borderRadius: "4px",
+            padding: "0.5rem",
+            fontSize: "clamp(0.8rem, 2vw, 1rem)",
+            marginTop: "1rem", 
+            maxHeight: "30vh",
+          }}
+        >
+          <h3 style={{ fontSize: "clamp(1rem, 2.5vw, 1.5rem)" }}>Move History</h3>
+          {moveHistory.map((move, index) => (
+            <div key={index}>
+              {`${move.piece}: ${positionToAlgebraic(move.from)} → ${positionToAlgebraic(move.to)}`}
+            </div>
+          ))}
+        </div>
+
+        <style>
+  {`
+    @media (max-width: 768px) {
+      .main-container {
+        padding: 0.5rem !important;
+        height: auto !important;
+        min-height: 100vh !important;
+      }
+      
+      .board-container {
+        width: 75vw !important; // Reduced from 85vw
+        margin: 0.5rem auto !important;
+      }
+      
+      .move-history {
+        width: 75vw !important; // Reduced from 85vw
+        margin: 0.5rem auto !important;
+        position: relative !important;
+        font-size: 0.8rem !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .board-container {
+        width: 95vw !important;
+      }
+      
+      .move-history {
+        width: 95vw !important;
+      }
+    }
+  `}
+</style>
+      </div>
+    </ImageBackground>
+  </DndProvider>
+);
 }
