@@ -1,7 +1,5 @@
 import { Chess, Square } from "chess.js";
 import { Platform } from "react-native";
-import { Asset } from "expo-asset";
-
 export class StockfishService {
   private stockfish: Worker | null = null;
   private isReady = false;
@@ -21,7 +19,7 @@ export class StockfishService {
   async init() {
     try {
       if (Platform.OS === "web") {
-        // Web: Create a proxy worker that loads the CDN script
+        // Web
         const workerCode = `
           try {
             importScripts('https://cdn.jsdelivr.net/npm/stockfish.js@10.0.2/stockfish.js');
@@ -33,7 +31,7 @@ export class StockfishService {
         const blob = new Blob([workerCode], { type: "application/javascript" });
         this.stockfish = new Worker(URL.createObjectURL(blob));
       } else {
-        // Mobile: Same approach works for native
+        // Mobile
         const workerCode = `
           importScripts('https://cdn.jsdelivr.net/npm/stockfish.js@10.0.2/stockfish.js');
           self.postMessage('Worker ready');

@@ -13,7 +13,6 @@ const ItemTypes = {
 function ChessPiece({
   piece,
   position,
-  onRemove,
 }: {
   piece: string;
   position: number;
@@ -114,8 +113,6 @@ export function Home() {
     bestMovePositions,
     moveHistory,
     analyzePosition,
-    getBestMove,
-    stopAnalysis,
     setOption,
     recordMove,
   } = useStockfish();
@@ -278,12 +275,9 @@ export function Home() {
       newState[sourcePosition] = null;
       if (piece === "WPawn" && Math.floor(targetPosition / 8) === 0) {
         newState[targetPosition] = "WQueen";
-        // recordMove(sourcePosition, targetPosition, 'WQueen', newState, false);
       } else {
         newState[targetPosition] = piece;
-        // recordMove(sourcePosition, targetPosition, piece, newState, false);
       }
-      // setIsWhiteTurn(false);
       return newState;
     });
     setBoardState((updatedState) => {
