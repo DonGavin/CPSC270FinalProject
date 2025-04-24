@@ -137,6 +137,7 @@ export function Home() {
   } = useStockfish();
 
   const [isWhiteTurn, setIsWhiteTurn] = useState(true);
+  const [difficulty, setDifficulty] = useState(10);
   const [boardState, setBoardState] = useState<{
     [key: number]: string | null;
   }>({
@@ -211,11 +212,11 @@ export function Home() {
   useEffect(() => {
     // This is where we could configure stockfish options
     if (isReady) {
-      setOption("Skill Level", 10); // Adjust for User difficulty (0-20) if have time
+      setOption("Skill Level", difficulty); // Use the difficulty state
       console.log("Stockfish isReady:", isReady, "isThinking:", isThinking);
       analyzePosition(boardState, 15, isWhiteTurn);
     }
-  }, [isReady, boardState, isWhiteTurn, analyzePosition, setOption]);
+  }, [isReady, boardState, isWhiteTurn, analyzePosition, setOption, difficulty]);
 
   useEffect(() => {
     console.log("Best Move:", bestMove, "Positions:", bestMovePositions);
@@ -394,6 +395,34 @@ return (
           >
             {render()}
           </div>
+        </div>
+
+        <div
+          style={{
+            width: "min(300px, 85vw)",
+            marginTop: "1rem",
+            marginBottom: "1rem",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "0.5rem"
+          }}
+        >
+          <label htmlFor="difficulty" style={{ color: "black", fontSize: "1rem" }}>
+            AI Difficulty: {difficulty}
+          </label>
+          <input
+            type="range"
+            id="difficulty"
+            min="0"
+            max="20"
+            value={difficulty}
+            onChange={(e) => setDifficulty(Number(e.target.value))}
+            style={{
+              width: "100%",
+              height: "24px"
+            }}
+          />
         </div>
 
         <div
