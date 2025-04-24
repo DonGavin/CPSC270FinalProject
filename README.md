@@ -166,6 +166,4 @@ The `ios` and `android` folder are gitignored in the project by default as they 
 
 ## App Purpose
 
-The Entire purpose of the web gaming software we are building is to provide the user with a fun and interactive library of games in relation to Roanoke College
-- The games listed in the webstie will all pretain to Roanoke College, such as a mini-game where users can customize a charcter, or make custom commons dishes!
-- These games may give peace to some who currently have qualms with Roanoke College, and give them a productive outlet for their energy
+The Entire purpose of the Chess App is to test our coding knowledge and implementation of Machine Learning bots. We wanted to rebuild Chess.com for a better, free, user experience. 
