@@ -52,15 +52,15 @@ function ChessPiece({
       style={{
         opacity: isDragging ? 0.5 : 1,
         cursor: "grab",
-        padding: "0.25rem", // Reduced padding
-        margin: "0.1rem", // Reduced margin
+        padding: "0.25rem", 
+        margin: "0.1rem", 
         backgroundColor: piece[0] === "W" ? "white" : "black",
         color: piece[0] === "W" ? "black" : "white",
         border: "1px solid black",
-        width: "70%", // Reduced from 80%
-        maxWidth: "70%", // Reduced from 80%
+        width: "70%", 
+        maxWidth: "70%", 
         textAlign: "center",
-        fontSize: "clamp(0.5rem, 2vw, 0.8rem)", // Adjusted font size
+        fontSize: "clamp(0.5rem, 2vw, 0.8rem)",
       }}
     >
       {piece}
@@ -112,8 +112,8 @@ function BoardSquare({
         alignItems: "center",
         justifyContent: "center",
         position: "relative",
-        padding: "0", // Added to remove any default padding
-        boxSizing: "border-box", // Ensure padding is included in width
+        padding: "0", 
+        boxSizing: "border-box", 
       }}
     >
       {piece && (
@@ -351,7 +351,7 @@ export function Home() {
     return squares;
   };
 
-  // Update the main container and board styles
+ 
 return (
   <DndProvider backend={MultiBackend} options={HTML5toTouch}>
     <ImageBackground source={Chess_Background}>
@@ -364,23 +364,23 @@ return (
     alignItems: "center",
     width: "100%",
     height: "100vh",
-    padding: "2vh 0.5rem", // Reduced padding further
+    padding: "2vh 0.5rem", 
     boxSizing: "border-box",
     position: "relative",
     overflowY: "auto",
   }}
       >
-        {/* Chess Board Container */}
+        
         <div
     className="board-container"
     style={{
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      width: "min(450px, 80vw)", // Reduced max width and viewport width
+      width: "min(450px, 80vw)", 
       aspectRatio: "1 / 1",
       position: "relative",
-      marginTop: "1rem", // Reduced top margin
+      marginTop: "1rem", 
     }}
         >
           <div
@@ -396,7 +396,6 @@ return (
           </div>
         </div>
 
-        {/* Move History */}
         <div
           className="move-history"
           style={{
@@ -407,7 +406,7 @@ return (
             borderRadius: "4px",
             padding: "0.5rem",
             fontSize: "clamp(0.8rem, 2vw, 1rem)",
-            marginTop: "1rem", // Space between board and history
+            marginTop: "1rem", 
             maxHeight: "30vh",
           }}
         >
