@@ -38,16 +38,36 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@eslint/js": "^9.25.1",
     "@types/chess.js": "^0.13.7",
     "@types/react": "~18.3.12",
     "copy-webpack-plugin": "^13.0.0",
-    "typescript": "^5.7.2"
+    "eslint": "^9.25.1",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.2.6",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^16.0.0",
+    "prettier": "3.5.3",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.31.0"
   },
-  "expo":{
+  "expo": {
     "packagerOpts": {
       "config": "metro.config.js",
-      "sourceExts": ["js", "jsx", "ts", "tsx"],
-      "assetExts": ["js", "wasm", "json", "png", "ttf"]
+      "sourceExts": [
+        "js",
+        "jsx",
+        "ts",
+        "tsx"
+      ],
+      "assetExts": [
+        "js",
+        "wasm",
+        "json",
+        "png",
+        "ttf"
+      ]
     }
   },
   "private": true

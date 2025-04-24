@@ -1,6 +1,6 @@
-import { Chess, Square } from 'chess.js';
-import { Platform } from 'react-native';
-import { Asset } from 'expo-asset';
+import { Chess, Square } from "chess.js";
+import { Platform } from "react-native";
+import { Asset } from "expo-asset";
 
 export class StockfishService {
   private stockfish: Worker | null = null;
@@ -20,7 +20,7 @@ export class StockfishService {
 
   async init() {
     try {
-      if (Platform.OS === 'web') {
+      if (Platform.OS === "web") {
         // Web: Create a proxy worker that loads the CDN script
         const workerCode = `
           try {
@@ -30,7 +30,7 @@ export class StockfishService {
             self.postMessage('Worker error: ' + e.message);
           }
         `;
-        const blob = new Blob([workerCode], { type: 'application/javascript' });
+        const blob = new Blob([workerCode], { type: "application/javascript" });
         this.stockfish = new Worker(URL.createObjectURL(blob));
       } else {
         // Mobile: Same approach works for native
@@ -38,26 +38,26 @@ export class StockfishService {
           importScripts('https://cdn.jsdelivr.net/npm/stockfish.js@10.0.2/stockfish.js');
           self.postMessage('Worker ready');
         `;
-        const blob = new Blob([workerCode], { type: 'application/javascript' });
+        const blob = new Blob([workerCode], { type: "application/javascript" });
         this.stockfish = new Worker(URL.createObjectURL(blob));
       }
 
       this.stockfish.onmessage = (event) => {
         const message = event.data;
-        console.log('Stockfish message:', message);
+        console.log("Stockfish message:", message);
 
         if (this.callbacks.onMessage) {
           this.callbacks.onMessage(message);
         }
 
-        if (message === 'readyok') {
+        if (message === "readyok") {
           this.isReady = true;
           if (this.callbacks.onReady) {
             this.callbacks.onReady();
           }
         }
 
-        if (message.includes('score cp')) {
+        if (message.includes("score cp")) {
           const match = message.match(/score cp (-?\d+)/);
           if (match && this.callbacks.onEvaluation) {
             const score = parseInt(match[1], 10) / 100;
@@ -65,7 +65,7 @@ export class StockfishService {
           }
         }
 
-        if (message.includes('score mate')) {
+        if (message.includes("score mate")) {
           const match = message.match(/score mate (-?\d+)/);
           if (match && this.callbacks.onEvaluation) {
             const mateIn = parseInt(match[1], 10);
@@ -73,7 +73,7 @@ export class StockfishService {
           }
         }
 
-        if (message.startsWith('bestmove')) {
+        if (message.startsWith("bestmove")) {
           const match = message.match(/bestmove (\w+)/);
           if (match && this.callbacks.onBestMove) {
             this.callbacks.onBestMove(match[1]);
@@ -81,13 +81,12 @@ export class StockfishService {
         }
       };
 
-      this.stockfish.postMessage('uci');
-      this.stockfish.postMessage('isready');
+      this.stockfish.postMessage("uci");
+      this.stockfish.postMessage("isready");
     } catch (error) {
-      console.error('Failed to initialize Stockfish:', error);
+      console.error("Failed to initialize Stockfish:", error);
     }
   }
-
 
   onReady(callback: () => void) {
     this.callbacks.onReady = callback;
@@ -108,7 +107,10 @@ export class StockfishService {
     this.callbacks.onEvaluation = callback;
   }
 
-  boardStateToFEN(boardState: { [key: number]: string | null }, isWhiteTurn: boolean = true): string {
+  boardStateToFEN(
+    boardState: { [key: number]: string | null },
+    isWhiteTurn: boolean = true,
+  ): string {
     this.chess.reset();
     this.chess.clear();
 
@@ -119,27 +121,27 @@ export class StockfishService {
         const col = i % 8;
         const square = String.fromCharCode(97 + col) + (8 - row);
 
-        const color = piece[0] === 'W' ? 'w' : 'b';
+        const color = piece[0] === "W" ? "w" : "b";
         let pieceType = piece.slice(1).toLowerCase();
 
         switch (pieceType) {
-          case 'pawn':
-            pieceType = 'p';
+          case "pawn":
+            pieceType = "p";
             break;
-          case 'rook':
-            pieceType = 'r';
+          case "rook":
+            pieceType = "r";
             break;
-          case 'knight':
-            pieceType = 'n';
+          case "knight":
+            pieceType = "n";
             break;
-          case 'bishop':
-            pieceType = 'b';
+          case "bishop":
+            pieceType = "b";
             break;
-          case 'queen':
-            pieceType = 'q';
+          case "queen":
+            pieceType = "q";
             break;
-          case 'king':
-            pieceType = 'k';
+          case "king":
+            pieceType = "k";
             break;
         }
 
@@ -148,30 +150,38 @@ export class StockfishService {
     }
 
     const fen = this.chess.fen();
-    const parts = fen.split(' ');
-    parts[1] = isWhiteTurn ? 'w' : 'b';
-    return parts.join(' ');
+    const parts = fen.split(" ");
+    parts[1] = isWhiteTurn ? "w" : "b";
+    return parts.join(" ");
   }
 
-  analyzePosition(boardState: { [key: number]: string | null }, depth = 15, isWhiteTurn = true) {
+  analyzePosition(
+    boardState: { [key: number]: string | null },
+    depth = 15,
+    isWhiteTurn = true,
+  ) {
     if (!this.stockfish || !this.isReady) {
-      console.error('Stockfish is not ready');
+      console.error("Stockfish is not ready");
       return;
     }
 
     const fen = this.boardStateToFEN(boardState, isWhiteTurn);
-    console.log('Analyzing FEN:', fen);
+    console.log("Analyzing FEN:", fen);
     this.stockfish.postMessage(`position fen ${fen}`);
     this.stockfish.postMessage(`go depth ${depth}`);
   }
 
-  getBestMove(boardState: { [key: number]: string | null }, depth = 15, isWhiteTurn = true) {
+  getBestMove(
+    boardState: { [key: number]: string | null },
+    depth = 15,
+    isWhiteTurn = true,
+  ) {
     this.analyzePosition(boardState, depth, isWhiteTurn);
   }
 
   stopAnalysis() {
     if (this.stockfish) {
-      this.stockfish.postMessage('stop');
+      this.stockfish.postMessage("stop");
     }
   }
 
