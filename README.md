@@ -3,16 +3,20 @@
 ## To Start
 
 Make sure you have:
+
 - [Git](https://git-scm.com/downloads) installed on your computer
 
 ## Cloning a Remote Repository
+
 - A Remote Repository is exactly what you're viewing right now, it allows us to share files and document changes easily
+
 ## What is Cloning?
+
 - Cloning is the practice of essentially copying the remote repository to your local device
 - Through cloning the repository you have easy access to it, and are able to work within branches
 - We need to clone because if we did not this project would essentially turn into an unorganized Cluster F#$%
 
-### Make your clone 
+### Make your clone
 
 1. Launch Visual Studio Code
 2. Click on the Source Control icon in the Activity Bar (or press `Ctrl+Shift+G`)
@@ -21,7 +25,7 @@ Make sure you have:
 5. Select a local folder where you want the repository to be saved
 6. When prompted, open the cloned repository
 
-### OR if you want to feel like a *cool hacker* and use the Command Line 
+### OR if you want to feel like a _cool hacker_ and use the Command Line
 
 1. Open Terminal in VSCode (Terminal > New Terminal)
 2. Navigate to the directory where you want to clone the repository
@@ -35,7 +39,7 @@ Make sure you have:
    code .
    ```
 
-## Branches (The Next Step) 
+## Branches (The Next Step)
 
 ### Viewing Branches
 
@@ -43,6 +47,7 @@ Make sure you have:
 2. This displays all local and remote branches
 
 ### What is a Branch?
+
 - As mentioned above a branch is your own personal area to code in
 - We make branches so when we commit changes to the code, we don't break the entire program
 - You should **NEVER** commit changes directly to the main branch
@@ -53,6 +58,7 @@ Make sure you have:
 ### Creating a New Branch (You Should already have cloned the repository at this point)
 
 #### Using VSCode:
+
 1. Click on the branch name in the status bar (bottom-left)
 2. Select "Create new branch"
 3. Enter a name for your new branch
@@ -61,12 +67,13 @@ Make sure you have:
 ### Switching Between Branches
 
 #### Using VSCode:
+
 1. Click on the branch name in the status bar
 2. Select the branch you want to switch to
 
 ### Making Changes in Your Branch
 
-1. Make your code changes in VSCode (You shouldn't ever have to really go online) 
+1. Make your code changes in VSCode (You shouldn't ever have to really go online)
 2. Stage changes by clicking the "+" next to modified files in the Source Control panel (or by pressing `Ctrl+S`)
 3. Enter a commit message in the text field
 4. Click the checkmark icon (or press `Ctrl+Enter`) to commit
@@ -74,53 +81,58 @@ Make sure you have:
 ### Pushing Changes to GitHub
 
 #### Using VSCode:
+
 1. Click "..." in the Source Control panel
 2. Select "Push"
 3. If it's your first push to this branch, select "Publish Branch"
 4. **DO NOT** push to the main branch before discussing in class
 
 #### Using Command Line:
+
 ```
 git push origin my-branch-name
 ```
 
 ### Pulling the Latest Changes
+
 - You might be asking "But Surfur Gav! When do I push!"
   Great question, this is why you're my favorite!
 - You should pull ONLY from the main for the time being after any new changes are commited to the main branch
 - When you pull (grab the newest version of the code) there will be options to merge
 - When you merge you can choose what to keep from the updated version, and if you'd like to keep anything from yours
 - For example if the merge version has nothing to do with the file you're editing, simply keep the file you're working on, and merge all other changes
+
 #### Pulling in VSCode:
+
 1. Click "..." in the Source Control panel
 2. Select "Pull"
-
 
 ## What do these Git Commands do?
 
 - `git commit -m "message"`: Commit staged changes
   1. To commit is to publish this change as a snap shot
   2. It allows you to look for errors or difficulties that could arise
-  3. You must always commit before pushing 
+  3. You must always commit before pushing
 - `git push`: Push commits to remote repository
   1. Pushing permanently alters a branch in the repository
-  2. It takes the changes you commited, and *pushes* them onto the branch
+  2. It takes the changes you commited, and _pushes_ them onto the branch
   3. Remember to **never** push changes to the main branch unless we meet and discuss first
 - `git pull`: Fetch and merge changes from remote repository
-  1. Once you perform your initial clone, you will need to *pull* any changes made to the main branch
-  2. Pulling from the main branch will ensure your code is up to date, and that any changes you've made work with the current version 
+  1. Once you perform your initial clone, you will need to _pull_ any changes made to the main branch
+  2. Pulling from the main branch will ensure your code is up to date, and that any changes you've made work with the current version
 - `git branch -d branch-name`: Delete a branch locally
 
-## In Summary 
+## In Summary
 
 1. **Pull before push**: Always pull the latest changes before pushing to avoid conflicts
 2. **Commit Commit Commit**: Make small, focused commits with clear messages. More frequent commits rather than periodic **GIANT** ones
 3. **Use descriptive branch names**: Name branches according to the feature/bug you're working on, but Try not to bloat the repo with too many
-4. **Keep your branch up to date**: Regularly merge changes from the **main branch into your branch
+4. **Keep your branch up to date**: Regularly merge changes from the \*\*main branch into your branch
 5. **DO NOT**
 6. **Delete merged branches**: Clean up branches after they've been merged
 
 ### Merge Conflicts
+
 1. Open the files with conflicts/errors in VSCode
 2. Look for conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`)
 3. Edit the files to resolve conflicts
@@ -128,9 +140,11 @@ git push origin my-branch-name
 5. Commit the changes
 
 ### Uncommitted Changes Error When Switching Branches
+
 - Commit your changes before switching
 
 # Running and Working with the app
+
 - Edit the `src/App.tsx` file to start working on the app.
 
 ## Running the app
@@ -158,6 +172,7 @@ git push origin my-branch-name
 - In the terminal running the development server, press `i` to open the iOS simulator, `a` to open the Android device or emulator, or `w` to open the web browser.
 
 ## Notes
+
 This app uses the react-dnd library, with a HTML5 backend
 
 https://react-dnd.github.io/react-dnd/docs/api/dnd-provider
@@ -165,5 +180,6 @@ https://react-dnd.github.io/react-dnd/docs/api/dnd-provider
 The `ios` and `android` folder are gitignored in the project by default as they are automatically generated during the build process ([Continuous Native Generation](https://docs.expo.dev/workflow/continuous-native-generation/)). This means that you should not edit these folders directly and use [config plugins](https://docs.expo.dev/config-plugins/) instead. However, if you need to edit these folders, you can remove them from the `.gitignore` file so that they are tracked by git.
 
 ## App Purpose
+
 
 The Entire purpose of the Chess App is to test our coding knowledge and implementation of Machine Learning bots. We wanted to rebuild Chess.com for a better, free, user experience. 

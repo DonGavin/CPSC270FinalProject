@@ -6,7 +6,10 @@
     "start": "expo start --dev-client",
     "web": "expo start --web",
     "android": "expo run:android",
-    "ios": "expo run:ios"
+    "ios": "expo run:ios",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@expo/metro-runtime": "~4.0.0",
@@ -14,15 +17,25 @@
     "@react-navigation/elements": "^2.2.3",
     "@react-navigation/native": "^7.0.12",
     "@react-navigation/native-stack": "^7.1.13",
+    "@typescript-eslint/eslint-plugin": "^8.31.0",
+    "@typescript-eslint/parser": "^8.31.0",
     "chess.js": "^1.2.0",
+    "eslint": "^9.25.1",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.2.6",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
     "expo": "~52.0.11",
     "expo-asset": "~11.0.1",
     "expo-dev-client": "~5.0.4",
     "expo-splash-screen": "~0.29.13",
     "expo-system-ui": "~4.0.4",
+    "prettier": "^3.5.3",
     "react": "18.3.1",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
+    "react-dnd-multi-backend": "^9.0.0",
+    "react-dnd-touch-backend": "^16.0.1",
     "react-dom": "18.3.1",
     "react-native": "0.76.3",
     "react-native-chessboard": "^0.1.2",
@@ -43,11 +56,22 @@
     "copy-webpack-plugin": "^13.0.0",
     "typescript": "^5.7.2"
   },
-  "expo":{
+  "expo": {
     "packagerOpts": {
       "config": "metro.config.js",
-      "sourceExts": ["js", "jsx", "ts", "tsx"],
-      "assetExts": ["js", "wasm", "json", "png", "ttf"]
+      "sourceExts": [
+        "js",
+        "jsx",
+        "ts",
+        "tsx"
+      ],
+      "assetExts": [
+        "js",
+        "wasm",
+        "json",
+        "png",
+        "ttf"
+      ]
     }
   },
   "private": true

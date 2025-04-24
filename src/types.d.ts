@@ -1,14 +1,14 @@
-declare module '*.png' {
-  const value: import('react-native').ImageSourcePropType;
+declare module "*.png" {
+  const value: import("react-native").ImageSourcePropType;
   export default value;
 }
 
-declare module '*.jpg' {
-  const value: import('react-native').ImageSourcePropType;
+declare module "*.jpg" {
+  const value: import("react-native").ImageSourcePropType;
   export default value;
 }
 
-declare module 'stockfish.js'{
+declare module "stockfish.js" {
   const content: string;
   export default content;
 }
